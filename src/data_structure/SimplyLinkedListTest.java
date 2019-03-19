@@ -39,4 +39,19 @@ class SimplyLinkedListTest {
     list.addLast(55);
     assertEquals(55, list.getLast());
   }
+
+  @Test
+  void testRemoveFirst() {
+    list.addFirst(60);
+    assertEquals(60, list.getFirst());
+
+    list.removeFirst();
+    assertNull(list.getFirst());
+
+    list.addFirst(88);
+    list.addFirst(99);
+    list.removeFirst();
+
+    assertEquals(88, list.getFirst());
+  }
 }
