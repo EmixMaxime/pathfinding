@@ -1,5 +1,6 @@
 package data_structure;
 
+import data_structure.array_list.MxArrayList;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
