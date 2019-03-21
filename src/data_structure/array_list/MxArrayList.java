@@ -36,9 +36,8 @@ public class MxArrayList<E> extends AbstractList<E> implements List<E>, RandomAc
     arrayContainer.add(defaultMxArray);
   }
 
-  // @TODO
   public int size() {
-    return 0;
+    return size;
   }
 
   private MxArray<E> getLastArrayContainer() {
@@ -97,7 +96,8 @@ public class MxArrayList<E> extends AbstractList<E> implements List<E>, RandomAc
 
   private void add(E e, MxArray<E> elementData) {
     if (elementData.isFull()) {
-      grow();
+      System.out.println("Full, so grow!");
+      elementData = grow();
     }
 
     elementData.add(e);
@@ -113,14 +113,14 @@ public class MxArrayList<E> extends AbstractList<E> implements List<E>, RandomAc
    */
   @SuppressWarnings("unchecked")
   public E get(int index) {
-    if (index > DEFAULT_CAPACITY) {
+    if (index+1 > DEFAULT_CAPACITY) {
       int indexInRepo = index % DEFAULT_CAPACITY;
       int indexOfRepo = index / DEFAULT_CAPACITY;
 
       return (E) arrayContainer.get(indexOfRepo).get(indexInRepo);
     }
 
-    return (E) arrayContainer.get(0).get(0);
+    return (E) arrayContainer.get(0).get(index);
   }
 
   /**
@@ -131,16 +131,17 @@ public class MxArrayList<E> extends AbstractList<E> implements List<E>, RandomAc
    * @throws OutOfMemoryError if minCapacity is less than zero
    * @return the new data array
    */
-  private Object[] grow(int minCapacity) {
+  private MxArray<E> grow(int minCapacity) {
     int capacity = newCapacity(minCapacity);
 
     Object[] a = new Object[capacity];
+    MxArray mxArray = new MxArray<>(a);
 
-    arrayContainer.add(new MxArray<>(a));
-    return a;
+    arrayContainer.add(mxArray);
+    return mxArray;
   }
 
-  private Object[] grow() {
+  private MxArray<E> grow() {
     return grow(size + 1);
   }
 

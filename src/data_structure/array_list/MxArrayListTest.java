@@ -1,4 +1,4 @@
-package data_structure;
+package data_structure.array_list;
 
 import data_structure.array_list.MxArrayList;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,8 @@ class MxArrayListTest {
       ar.add(i);
     }
     assertEquals(0, ar.get(0));
+    assertEquals(1, ar.get(1));
     assertEquals(10, ar.get(10));
-    assertEquals(12, ar.get(11));
+    assertEquals(11, ar.get(11));
   }
 }
