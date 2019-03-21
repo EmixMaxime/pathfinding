@@ -50,5 +50,13 @@ class MxArrayTest {
   void length() {}
 
   @Test
-  void get() {}
+  void get() {
+    Integer[] baseArray = new Integer[5];
+    MxArray mxArray = new MxArray(baseArray);
+
+    for (int i = 0; i < 5; i++) {
+      mxArray.add(i);
+      assertEquals(i, mxArray.get(i));
+    }
+  }
 }
