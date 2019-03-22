@@ -64,7 +64,8 @@ public class MxArrayList<E> extends AbstractList<E> implements List<E>, RandomAc
   private void rangeCheckForAdd(int index) {
     int[] indexes = getIndexes(index);
 
-    if (arrayContainer.size() < indexes[0] || arrayContainer.get(indexes[0]).length() < indexes[1]) {
+    if (arrayContainer.size() < indexes[0]
+        || arrayContainer.get(indexes[0]).length() < indexes[1]) {
       throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
     }
   }
@@ -113,7 +114,7 @@ public class MxArrayList<E> extends AbstractList<E> implements List<E>, RandomAc
    */
   @SuppressWarnings("unchecked")
   public E get(int index) {
-    if (index+1 > DEFAULT_CAPACITY) {
+    if (index + 1 > DEFAULT_CAPACITY) {
       int indexInRepo = index % DEFAULT_CAPACITY;
       int indexOfRepo = index / DEFAULT_CAPACITY;
 
