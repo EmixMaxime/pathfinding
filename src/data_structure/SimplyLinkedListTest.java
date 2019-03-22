@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SimplyLinkedListTest {
 
-  Deque<Integer> list;
+  private Deque<Integer> list;
 
   @org.junit.jupiter.api.BeforeEach
   void setUp() {
@@ -24,20 +24,9 @@ class SimplyLinkedListTest {
 
     list.addFirst(12);
     assertEquals(12, list.getFirst());
-    assertEquals(12, list.getLast());
 
     list.addFirst(20);
     assertEquals(20, list.getFirst());
-    assertEquals(12, list.getLast());
-  }
-
-  @Test
-  void testAddLast() {
-    list.addLast(10);
-    assertEquals(10, list.getLast());
-
-    list.addLast(55);
-    assertEquals(55, list.getLast());
   }
 
   @Test
@@ -53,6 +42,15 @@ class SimplyLinkedListTest {
     list.removeFirst();
 
     assertEquals(88, list.getFirst());
+  }
+
+  @Test
+  void testAddLast() {
+    list.addLast(10);
+    assertEquals(10, list.getLast());
+
+    list.addLast(55);
+    assertEquals(55, list.getLast());
   }
 
   @Test
