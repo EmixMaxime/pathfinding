@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
- * @param <S>
- * @param <D>
+ * @param <S> step type.
+ * @param <D> type of data associated to seen steps.
  */
 public abstract class CrossIterator<S, D> implements Iterator<S> {
 
