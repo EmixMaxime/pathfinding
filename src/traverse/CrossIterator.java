@@ -21,11 +21,20 @@ public abstract class CrossIterator<S, D> implements Iterator<S> {
 
   private Explorable<S> explorable;
 
+  /**
+   * The default seen data structure is HashMap.
+   * 
+   * @param explorable explorable data structure.
+   * @param startStep startStep
+   */
   public CrossIterator(Explorable<S> explorable, S startStep) {
+    this(explorable, startStep, new HashMap<>());
+  }
+
+  public CrossIterator(Explorable<S> explorable, S startStep, Map<S, D> seen) {
     this.explorable = explorable;
     this.startStep = startStep;
-
-    seen = new HashMap<>();
+    this.seen = seen;
   }
 
   /**
