@@ -1,6 +1,6 @@
 package map;
 
-public class MapInformations {
+public class MapInformation {
   private String title;
 
   public String getTitle() {
