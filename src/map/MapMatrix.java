@@ -58,11 +58,11 @@ public class MapMatrix implements Explorable {
     }
 
     // top
-    if (step2D.getY() + 1 <= ySize) {
+    if (step2D.getY() + 1 < ySize) {
       reachable.add(matrix[step2D.getX()][step2D.getY() + 1]);
     }
     // right
-    if (step2D.getX() + 1 <= xSize) {
+    if (step2D.getX() + 1 < xSize) {
       reachable.add(matrix[step2D.getX() + 1][step2D.getY()]);
     }
     // bottom
