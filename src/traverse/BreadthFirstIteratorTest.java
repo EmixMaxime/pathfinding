@@ -22,7 +22,7 @@ class BreadthFirstIteratorTest {
 
     MapMatrix mapMatrix = new MapMatrix(matrix);
 
-    BreadthFirstIterator it = new BreadthFirstIterator(mapMatrix, matrix[0][0]);
+    BreadthFirstIterator it = new BreadthFirstIterator(mapMatrix, matrix[0][0], matrix[3][3]);
     assertTrue(it.hasNext());
 
     while (it.hasNext()) {

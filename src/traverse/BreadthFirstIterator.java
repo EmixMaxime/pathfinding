@@ -20,6 +20,11 @@ public class BreadthFirstIterator
     super(explorable, startStep);
   }
 
+  public BreadthFirstIterator(
+      Explorable explorable, StepInterface startStep, StepInterface endStep) {
+    super(explorable, startStep, endStep);
+  }
+
   /** {@inheritDoc} */
   protected StepInterface nextStep() {
     return queue.removeFirst();

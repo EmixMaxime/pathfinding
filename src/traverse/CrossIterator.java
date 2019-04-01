@@ -16,6 +16,8 @@ public abstract class CrossIterator<D> implements Iterator<StepInterface> {
   private Map<StepInterface, D> seen;
 
   private StepInterface startStep;
+  private StepInterface endStep;
+  private boolean foundEndStep = false;
 
   private Explorable explorable;
 
@@ -26,12 +28,21 @@ public abstract class CrossIterator<D> implements Iterator<StepInterface> {
    * @param startStep startStep
    */
   public CrossIterator(Explorable explorable, StepInterface startStep) {
-    this(explorable, startStep, new HashMap<>());
+    this(explorable, startStep, new HashMap<>(), null);
   }
 
-  public CrossIterator(Explorable explorable, StepInterface startStep, Map<StepInterface, D> seen) {
+  public CrossIterator(Explorable explorable, StepInterface startStep, StepInterface endStep) {
+    this(explorable, startStep, new HashMap<>(), endStep);
+  }
+
+  public CrossIterator(
+      Explorable explorable,
+      StepInterface startStep,
+      Map<StepInterface, D> seen,
+      StepInterface endStep) {
     this.explorable = explorable;
     this.startStep = startStep;
+    this.endStep = endStep;
     this.seen = seen;
   }
 
@@ -53,6 +64,10 @@ public abstract class CrossIterator<D> implements Iterator<StepInterface> {
   }
 
   public boolean hasNext() {
+    if (foundEndStep) {
+      return false;
+    }
+
     if (startStep != null) {
       encounterStartStep();
     }
@@ -65,6 +80,10 @@ public abstract class CrossIterator<D> implements Iterator<StepInterface> {
     }
   }
 
+  private boolean isEndStep(StepInterface step) {
+    return endStep != null && step.equals(endStep);
+  }
+
   public StepInterface next() {
     if (startStep != null) {
       encounterStartStep();
@@ -72,7 +91,12 @@ public abstract class CrossIterator<D> implements Iterator<StepInterface> {
 
     if (hasNext()) {
       StepInterface nextStep = nextStep();
-      addUnseenStepsOf(nextStep);
+
+      if (!isEndStep(nextStep)) {
+        addUnseenStepsOf(nextStep);
+      } else {
+        foundEndStep = true;
+      }
 
       return nextStep;
     }
