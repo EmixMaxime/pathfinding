@@ -28,4 +28,9 @@ public class Step2D<D> implements StepInterface<D> {
     Step2D step = (Step2D) stepCompare;
     return step.getX() == x && step.getY() == y && step.getData().equals(data);
   }
+
+  @Override
+  public String toString() {
+    return "(" + x + "," + y + ")" + "=" + data.toString();
+  }
 }
