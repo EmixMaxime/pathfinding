@@ -23,13 +23,10 @@ class BreadthFirstIteratorTest {
     MapMatrix mapMatrix = new MapMatrix(matrix);
 
     BreadthFirstIterator it = new BreadthFirstIterator(mapMatrix, matrix[0][0]);
-    assertEquals(true, it.hasNext());
+    assertTrue(it.hasNext());
 
-//    it.next();
-
-    while(it.hasNext()) {
+    while (it.hasNext()) {
       System.out.println(it.next());
     }
   }
-
 }
