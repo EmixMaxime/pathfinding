@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class MapBuilder {
 
   private Path file;
-  private MapInformations map;
+  private MapInformation map;
   private int[][] matrix;
 
   public MapBuilder() {
@@ -21,7 +21,7 @@ public class MapBuilder {
   }
 
   public MapBuilder(String mapName) {
-    this.map = new MapInformations();
+    this.map = new MapInformation();
     this.file = Paths.get("resources/" + mapName + ".txt");
     this.readAndCreateMatrix();
   }
@@ -56,8 +56,6 @@ public class MapBuilder {
           case 3:
             break;
           case 4:
-            System.out.println(line);
-
             int[] coords = extractNumbersFromStr(line);
 
             int rows = coords[0];
@@ -68,7 +66,7 @@ public class MapBuilder {
             System.out.println(Arrays.toString(coords));
             break;
           default:
-            // System.out.println("The maze!");
+             System.out.println(line);
 
         }
       }
