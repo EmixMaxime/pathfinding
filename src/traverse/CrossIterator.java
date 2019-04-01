@@ -5,33 +5,31 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-/**
- * @param <S> step type.
- * @param <D> type of data associated to seen steps.
- */
-public abstract class CrossIterator<S, D> implements Iterator<S> {
+/** @param <D> type of data associated to seen steps. */
+public abstract class CrossIterator<D> implements Iterator<StepInterface> {
 
   /**
    * Stores the steps that have been seen during iteration and (optionally) some additional
-   * traversal info regarding each step.
+   * traversal info regarding each step. Can be used to store the path if the data contains the
+   * predecessor.
    */
-  private Map<S, D> seen;
+  private Map<StepInterface, D> seen;
 
-  private S startStep;
+  private StepInterface startStep;
 
-  private Explorable<S> explorable;
+  private Explorable explorable;
 
   /**
    * The default seen data structure is HashMap.
-   * 
+   *
    * @param explorable explorable data structure.
    * @param startStep startStep
    */
-  public CrossIterator(Explorable<S> explorable, S startStep) {
+  public CrossIterator(Explorable explorable, StepInterface startStep) {
     this(explorable, startStep, new HashMap<>());
   }
 
-  public CrossIterator(Explorable<S> explorable, S startStep, Map<S, D> seen) {
+  public CrossIterator(Explorable explorable, StepInterface startStep, Map<StepInterface, D> seen) {
     this.explorable = explorable;
     this.startStep = startStep;
     this.seen = seen;
@@ -42,7 +40,7 @@ public abstract class CrossIterator<S, D> implements Iterator<S> {
    *
    * @return the next step to be iterated.
    */
-  protected abstract S nextStep();
+  protected abstract StepInterface nextStep();
 
   /**
    * Determines whether a step has been seen yet by this traversal.
@@ -50,11 +48,15 @@ public abstract class CrossIterator<S, D> implements Iterator<S> {
    * @param step step in question
    * @return <tt>true</tt> if step has already been seen
    */
-  protected boolean isSeenStep(S step) {
+  protected boolean isSeenStep(StepInterface step) {
     return seen.containsKey(step);
   }
 
   public boolean hasNext() {
+    if (startStep != null) {
+      encounterStartStep();
+    }
+
     if (!isConnectedComponentExhausted()) {
       return true;
     } else {
@@ -63,13 +65,13 @@ public abstract class CrossIterator<S, D> implements Iterator<S> {
     }
   }
 
-  public S next() {
+  public StepInterface next() {
     if (startStep != null) {
       encounterStartStep();
     }
 
     if (hasNext()) {
-      S nextStep = nextStep();
+      StepInterface nextStep = nextStep();
       addUnseenStepsOf(nextStep);
 
       return nextStep;
@@ -98,7 +100,7 @@ public abstract class CrossIterator<S, D> implements Iterator<S> {
    * @param fromStep the step via which the step was encountered, or null if the step is a starting
    *     point
    */
-  protected abstract void encounterStep(S step, S fromStep);
+  protected abstract void encounterStep(StepInterface step, StepInterface fromStep);
 
   /**
    * Called whenever we re-encounter a step. The default implementation does nothing. Could be used
@@ -107,10 +109,10 @@ public abstract class CrossIterator<S, D> implements Iterator<S> {
    * @param step the step re-encountered
    * @param stepFrom the step via which the step was re-encountered
    */
-  protected abstract void encounterStepAgain(S step, S stepFrom);
+  protected abstract void encounterStepAgain(StepInterface step, StepInterface stepFrom);
 
-  private void addUnseenStepsOf(S fromStep) {
-    for (S step : explorable.getReachableStepsFrom(fromStep)) {
+  private void addUnseenStepsOf(StepInterface fromStep) {
+    for (StepInterface step : explorable.getReachableStepsFrom(fromStep)) {
       if (isSeenStep(step)) {
         encounterStepAgain(step, fromStep);
       } else {
@@ -126,7 +128,7 @@ public abstract class CrossIterator<S, D> implements Iterator<S> {
    * @return data associated with the seen step or <code>null</code> if no data was associated with
    *     the step.
    */
-  protected D getSeenData(S step) {
+  protected D getSeenData(StepInterface step) {
     return seen.get(step);
   }
 
@@ -139,7 +141,7 @@ public abstract class CrossIterator<S, D> implements Iterator<S> {
    * null</code> if no data was associated with the step. A <code>null</code> return can also
    *     indicate that the step was explicitly associated with <code>null</code>.
    */
-  protected D putSeenData(S step, D data) {
+  protected D putSeenData(StepInterface step, D data) {
     return seen.put(step, data);
   }
 }
