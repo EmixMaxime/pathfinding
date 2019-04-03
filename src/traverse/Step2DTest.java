@@ -15,7 +15,7 @@ class Step2DTest {
   void tearDown() {}
 
   @Test
-  void equals() {
+  void testEquals() {
     Step2D step1 = new Step2D<Integer>(1, 2, 55);
     Step2D step2 = new Step2D<Integer>(1, 2, 55);
 
