@@ -45,7 +45,7 @@ class MapMatrixTest {
 
     Step2D first = matrix[1][1];
     System.out.println(first.getX() + "," + first.getY());
-    Set<StepInterface> reachable = mapMatrix.getReachableStepsFrom(first, new HashSet<>());
+    Set<Step2D> reachable = mapMatrix.getReachableStepsFrom(first, new HashSet<>());
 
     Set<Step2D> expectedReachableSteps = new HashSet<>();
     expectedReachableSteps.add(matrix[0][1]);

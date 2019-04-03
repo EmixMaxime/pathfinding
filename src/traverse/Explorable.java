@@ -4,11 +4,12 @@ import java.util.Set;
 
 /**
  * Make any data structure Explorable.
- *
+ * @param <S> type of data that could be traversed.
  */
-public interface Explorable {
 
-  Set<StepInterface> getReachableStepsFrom(StepInterface step);
+public interface Explorable<S> {
+
+  Set<S> getReachableStepsFrom(S step);
 
   /**
    * Returns a set of all steps from the specified step.
@@ -21,5 +22,5 @@ public interface Explorable {
    * @throws NullPointerException if step is <code>null</code>.
    */
 
-  Set<StepInterface> getReachableStepsFrom(StepInterface step, Set<StepInterface> reachable);
+  Set<S> getReachableStepsFrom(S step, Set<S> reachable);
 }

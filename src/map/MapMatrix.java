@@ -7,7 +7,7 @@ import traverse.StepInterface;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MapMatrix implements Explorable {
+public class MapMatrix implements Explorable<Step2D> {
 
   private Step2D[][] matrix;
   private final boolean allowsDiagonals;
@@ -41,17 +41,12 @@ public class MapMatrix implements Explorable {
   //    Object[] y = new Object[ySize];
   //  }
 
-  public Set<StepInterface> getReachableStepsFrom(StepInterface step) {
-    Set<StepInterface> reachable = new HashSet<>();
-    return getReachableStepsFrom(step, reachable);
+  @Override
+  public Set<Step2D> getReachableStepsFrom(Step2D step) {
+    return getReachableStepsFrom(step, new HashSet<>());
   }
 
-  public Set<StepInterface> getReachableStepsFrom(
-      StepInterface step, Set<StepInterface> reachable) {
-    return getReachableStepsFrom((Step2D) step, reachable);
-  }
-
-  private Set<StepInterface> getReachableStepsFrom(Step2D step2D, Set<StepInterface> reachable) {
+  public Set<Step2D> getReachableStepsFrom(Step2D step2D, Set<Step2D> reachable) {
 
     if (allowsDiagonals) {
       // @TODO

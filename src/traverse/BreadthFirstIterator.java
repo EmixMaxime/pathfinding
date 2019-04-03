@@ -2,31 +2,27 @@ package traverse;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Map;
 import java.util.Objects;
 
-public class BreadthFirstIterator
-    extends CrossIterator<BreadthFirstIterator.SearchNodeData<StepInterface>> {
+public class BreadthFirstIterator<S> extends CrossIterator<S, BreadthFirstIterator.SearchNodeData<S>> {
 
-  private Deque<StepInterface> queue = new ArrayDeque<>();
+  private Deque<S> queue = new ArrayDeque<>();
 
-  /**
-   * Creates a new breadth-first iterator for the specified Explorable. Iteration will start at the
-   * specified start step.
-   *
-   * @param explorable the data structure to be iterated.
-   * @param startStep the step iteration to be started.
-   */
-  public BreadthFirstIterator(Explorable explorable, StepInterface startStep) {
+  public BreadthFirstIterator(Explorable<S> explorable, S startStep) {
     super(explorable, startStep);
   }
 
-  public BreadthFirstIterator(
-      Explorable explorable, StepInterface startStep, StepInterface endStep) {
+  public BreadthFirstIterator(Explorable<S> explorable, S startStep, S endStep) {
     super(explorable, startStep, endStep);
   }
 
+  public BreadthFirstIterator(Explorable<S> explorable, S startStep, Map<S, SearchNodeData<S>> seen, S endStep) {
+    super(explorable, startStep, seen, endStep);
+  }
+
   /** {@inheritDoc} */
-  protected StepInterface nextStep() {
+  protected S nextStep() {
     return queue.removeFirst();
   }
 
@@ -34,7 +30,7 @@ public class BreadthFirstIterator
     return queue.isEmpty();
   }
 
-  protected void encounterStep(StepInterface step, StepInterface fromStep) {
+  protected void encounterStep(S step, S fromStep) {
     Objects.requireNonNull(step);
     // when fromStep == null, it's the start step , so I have a depth of 0.
     int depth = (fromStep == null ? 0 : getSeenData(fromStep).depth + 1);
@@ -44,7 +40,7 @@ public class BreadthFirstIterator
   }
 
   /** {@inheritDoc} */
-  protected void encounterStepAgain(StepInterface step, StepInterface stepFrom) {}
+  protected void encounterStepAgain(S step, S stepFrom) {}
 
   /**
    * Returns the depth of step in the data structure. The depth of a step is defined as the number
@@ -54,7 +50,7 @@ public class BreadthFirstIterator
    * @param step step
    * @return depth of step in the data structure.
    */
-  public int getDepth(StepInterface step) {
+  public int getDepth(S step) {
     assert getSeenData(step) != null;
     return getSeenData(step).depth;
   }
