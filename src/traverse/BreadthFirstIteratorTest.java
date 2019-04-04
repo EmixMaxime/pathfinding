@@ -4,6 +4,8 @@ import map.MapMatrix;
 import org.junit.jupiter.api.Test;
 import plan.Step2D;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BreadthFirstIteratorTest {
@@ -28,6 +30,12 @@ class BreadthFirstIteratorTest {
 
     while (it.hasNext()) {
       System.out.println(it.next());
+    }
+
+    System.out.println("path:");
+    var steps = it.path();
+    for (var s : steps) {
+      System.out.println(s);
     }
   }
 }

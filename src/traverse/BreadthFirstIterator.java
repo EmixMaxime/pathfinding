@@ -5,7 +5,8 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.Objects;
 
-public class BreadthFirstIterator<S> extends CrossIterator<S, BreadthFirstIterator.SearchNodeData<S>> {
+public class BreadthFirstIterator<S>
+    extends CrossIterator<S, BreadthFirstIterator.SearchNodeData<S>> {
 
   private Deque<S> queue = new ArrayDeque<>();
 
@@ -17,7 +18,8 @@ public class BreadthFirstIterator<S> extends CrossIterator<S, BreadthFirstIterat
     super(explorable, startStep, endStep);
   }
 
-  public BreadthFirstIterator(Explorable<S> explorable, S startStep, Map<S, SearchNodeData<S>> seen, S endStep) {
+  public BreadthFirstIterator(
+      Explorable<S> explorable, S startStep, Map<S, SearchNodeData<S>> seen, S endStep) {
     super(explorable, startStep, seen, endStep);
   }
 
@@ -60,7 +62,7 @@ public class BreadthFirstIterator<S> extends CrossIterator<S, BreadthFirstIterat
    *
    * @param <S> the step type
    */
-  static class SearchNodeData<S> {
+  static class SearchNodeData<S> implements TracableStep<S> {
     final S step;
 
     /** Depth of node in search tree */
@@ -69,6 +71,11 @@ public class BreadthFirstIterator<S> extends CrossIterator<S, BreadthFirstIterat
     SearchNodeData(S step, int depth) {
       this.step = step;
       this.depth = depth;
+    }
+
+    @Override
+    public S getPredecessor() {
+      return step;
     }
   }
 }

@@ -1,15 +1,9 @@
 package traverse;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
-/**
- * @param <S> type of steps.
- * @param <D> type of data associated to seen steps.
- */
-public abstract class CrossIterator<S, D> implements Iterator<S> {
+/** @param <S> type of steps. */
+public abstract class CrossIterator<S, D extends TracableStep<S>> implements Iterator<S> {
 
   /**
    * Stores the steps that have been seen during iteration and (optionally) some additional
@@ -142,6 +136,24 @@ public abstract class CrossIterator<S, D> implements Iterator<S> {
         encounterStep(step, fromStep);
       }
     }
+  }
+
+  public List<S> path() {
+    if (endStep == null) {
+      return null;
+    }
+
+    ArrayList<S> path = new ArrayList<>();
+    D endStepData = getSeenData(endStep);
+
+    S predecessor = endStepData.getPredecessor();
+
+    while (predecessor != null) {
+      path.add(predecessor);
+      predecessor = getSeenData(predecessor).getPredecessor();
+    }
+
+    return path;
   }
 
   /**
