@@ -3,6 +3,7 @@ package map;
 import traverse.Explorable;
 import plan.Step2D;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,12 +17,19 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
     OBSTACLE
   }
 
+  public enum Directions {
+    TOP,
+    RIGHT,
+    BOTTOM,
+    LEFT
+  }
+
   /** Bounds of matrix. */
   private int xSize;
 
   private int ySize;
 
-  public MapMatrix(Step2D[][] matrix) {
+  public MapMatrix(Step2D<Values>[][] matrix) {
     this(matrix, false);
   }
 
@@ -33,7 +41,7 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
     return ySize;
   }
 
-  public MapMatrix(Step2D[][] matrix, boolean allowsDiagonals) {
+  public MapMatrix(Step2D<Values>[][] matrix, boolean allowsDiagonals) {
     this.allowsDiagonals = allowsDiagonals;
     this.matrix = matrix;
     xSize = matrix.length;
@@ -45,15 +53,41 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
     return data == Values.OBSTACLE;
   }
 
-  public boolean isWalkable(int x, int y) {
+  private Step2D<Values> isWalkable(Step2D<Values> from, Directions direction) {
+    int x = from.getX(), y = from.getY();
+
+    switch (direction) {
+      case TOP:
+        y = y + 1;
+        break;
+      case BOTTOM:
+        y = y - 1;
+        break;
+      case LEFT:
+        x = x - 1;
+        break;
+      case RIGHT:
+        x = x + 1;
+        break;
+    }
+
+    return isWalkable(x, y);
+  }
+
+  /**
+   * @param x
+   * @param y
+   * @return the step if walkable or null.
+   */
+  private Step2D<Values> isWalkable(int x, int y) {
     if ((x >= 0 && x < xSize) && (y >= 0 && y < ySize)) {
       // Get the step & test it.
-      Step2D step = matrix[x][y];
-      return isObstacle(step);
+      var step = matrix[x][y];
+      return !isObstacle(step) ? step : null;
     }
 
     // Out of the map!
-    return false;
+    return null;
   }
 
   @Override
@@ -68,37 +102,14 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
       // @TODO
     }
 
-    // top
-    if (step2D.getY() + 1 < ySize) {
-      var step = matrix[step2D.getX()][step2D.getY() + 1];
-      if (!isObstacle(step)) {
-        reachable.add(step);
-      }
-    }
-    // right
-    if (step2D.getX() + 1 < xSize) {
-      var step = matrix[step2D.getX() + 1][step2D.getY()];
-      if (!isObstacle(step)) {
-        reachable.add(step);
-      }
-    }
-    // bottom
-    if (step2D.getY() - 1 >= 0) {
-      var step = matrix[step2D.getX()][step2D.getY() - 1];
-      if (!isObstacle(step)) {
-        reachable.add(step);
+    for (Directions direction : Directions.values()) {
+      var targetStep = isWalkable(step2D, direction);
 
-      }
-    }
-    // left
-    if (step2D.getX() - 1 >= 0) {
-      var step = matrix[step2D.getX() - 1][step2D.getY()];
-      if (!isObstacle(step)) {
-        reachable.add(step);
+      if (targetStep != null) {
+        reachable.add((targetStep));
       }
     }
 
     return reachable;
   }
-
 }

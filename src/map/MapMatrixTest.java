@@ -2,9 +2,10 @@ package map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import traverse.Step2D;
+import plan.Step2D;
 import traverse.StepInterface;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,8 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class MapMatrixTest {
 
   @BeforeEach
-  void setUp() {
-  }
+  void setUp() {}
 
   @Test
   void testXSizeYSize() {
@@ -33,21 +33,22 @@ class MapMatrixTest {
     int xSize = 5;
     int ySize = 5;
 
-    Step2D[][] matrix = new Step2D[xSize][ySize];
+    Step2D<MapMatrix.Values>[][] matrix = new Step2D[xSize][ySize];
 
     for (int x = 0; x < xSize; x++) {
       for (int y = 0; y < ySize; y++) {
-        matrix[x][y] = new Step2D<Integer>(x, y, 1);
+        matrix[x][y] = new Step2D<>(x, y, MapMatrix.Values.ROAD);
       }
     }
 
     MapMatrix mapMatrix = new MapMatrix(matrix);
 
-    Step2D first = matrix[1][1];
-    System.out.println(first.getX() + "," + first.getY());
-    Set<Step2D> reachable = mapMatrix.getReachableStepsFrom(first, new HashSet<>());
+    Step2D<MapMatrix.Values> first = matrix[1][1];
 
-    Set<Step2D> expectedReachableSteps = new HashSet<>();
+    //    System.out.println(first.getX() + "," + first.getY());
+    var reachable = mapMatrix.getReachableStepsFrom(first, new HashSet<>());
+
+    var expectedReachableSteps = new HashSet<>();
     expectedReachableSteps.add(matrix[0][1]);
     expectedReachableSteps.add(matrix[1][0]);
     expectedReachableSteps.add(matrix[2][1]);
@@ -55,8 +56,8 @@ class MapMatrixTest {
 
     assertEquals(expectedReachableSteps, reachable);
 
-    matrix[0][1] = null;
-    matrix[2][1] = null;
+    matrix[0][1] = new Step2D<>(0, 1, MapMatrix.Values.OBSTACLE);
+    matrix[2][1] = new Step2D<>(2, 1, MapMatrix.Values.OBSTACLE);
 
     mapMatrix = new MapMatrix(matrix);
     reachable = mapMatrix.getReachableStepsFrom(first, new HashSet<>());
@@ -67,10 +68,9 @@ class MapMatrixTest {
 
     assertEquals(expectedReachableStepsWithoutNull, reachable);
 
-    for (StepInterface st : reachable) {
-      Step2D s = (Step2D) st;
+    for (Object st : reachable) {
+      Step2D<MapMatrix.Values> s = (Step2D<MapMatrix.Values>) st;
       System.out.println("reachable x,y " + s.getX() + "," + s.getY());
     }
-
   }
 }
