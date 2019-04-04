@@ -1,16 +1,20 @@
 package map;
 
 import traverse.Explorable;
-import traverse.Step2D;
-import traverse.StepInterface;
+import plan.Step2D;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class MapMatrix implements Explorable<Step2D> {
+public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
 
-  private Step2D[][] matrix;
+  private Step2D<Values>[][] matrix;
   private final boolean allowsDiagonals;
+
+  public enum Values {
+    ROAD,
+    OBSTACLE
+  }
 
   /** Bounds of matrix. */
   private int xSize;
@@ -36,17 +40,29 @@ public class MapMatrix implements Explorable<Step2D> {
     ySize = matrix[0].length;
   }
 
-  //  public MapMatrix(int xSize, int ySize) {
-  //    Object[] x = new Object[xSize];
-  //    Object[] y = new Object[ySize];
-  //  }
+  private boolean isObstacle(Step2D step) {
+    var data = step.getData();
+    return data == Values.OBSTACLE;
+  }
+
+  public boolean isWalkable(int x, int y) {
+    if ((x >= 0 && x < xSize) && (y >= 0 && y < ySize)) {
+      // Get the step & test it.
+      Step2D step = matrix[x][y];
+      return isObstacle(step);
+    }
+
+    // Out of the map!
+    return false;
+  }
 
   @Override
-  public Set<Step2D> getReachableStepsFrom(Step2D step) {
+  public Set<Step2D<Values>> getReachableStepsFrom(Step2D<Values> step) {
     return getReachableStepsFrom(step, new HashSet<>());
   }
 
-  public Set<Step2D> getReachableStepsFrom(Step2D step2D, Set<Step2D> reachable) {
+  public Set<Step2D<Values>> getReachableStepsFrom(
+      Step2D<Values> step2D, Set<Step2D<Values>> reachable) {
 
     if (allowsDiagonals) {
       // @TODO
@@ -54,24 +70,35 @@ public class MapMatrix implements Explorable<Step2D> {
 
     // top
     if (step2D.getY() + 1 < ySize) {
-      reachable.add(matrix[step2D.getX()][step2D.getY() + 1]);
+      var step = matrix[step2D.getX()][step2D.getY() + 1];
+      if (!isObstacle(step)) {
+        reachable.add(step);
+      }
     }
     // right
     if (step2D.getX() + 1 < xSize) {
-      reachable.add(matrix[step2D.getX() + 1][step2D.getY()]);
+      var step = matrix[step2D.getX() + 1][step2D.getY()];
+      if (!isObstacle(step)) {
+        reachable.add(step);
+      }
     }
     // bottom
     if (step2D.getY() - 1 >= 0) {
-      reachable.add(matrix[step2D.getX()][step2D.getY() - 1]);
+      var step = matrix[step2D.getX()][step2D.getY() - 1];
+      if (!isObstacle(step)) {
+        reachable.add(step);
+
+      }
     }
     // left
     if (step2D.getX() - 1 >= 0) {
-      reachable.add(matrix[step2D.getX() - 1][step2D.getY()]);
+      var step = matrix[step2D.getX() - 1][step2D.getY()];
+      if (!isObstacle(step)) {
+        reachable.add(step);
+      }
     }
-
-    // Remove obstacles
-    reachable.remove(null);
 
     return reachable;
   }
+
 }
