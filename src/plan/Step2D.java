@@ -1,4 +1,6 @@
-package traverse;
+package plan;
+
+import traverse.StepInterface;
 
 public class Step2D<D> implements StepInterface<D> {
 
