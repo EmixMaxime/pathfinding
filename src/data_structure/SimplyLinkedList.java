@@ -6,12 +6,39 @@ public class SimplyLinkedList<E>
         extends AbstractSequentialList<E>
         implements List<E>, Deque<E>, Cloneable
 {
+  private static class Node<E>
+  {
+    private E element;
+    private Node<E> next;
+    public Node(E e, Node<E> n){
+      element = e;
+      next = n;
+    }
+    public E getElement() {
+      return element;
+    }
+    public Node<E> getNext() {
+      return next;
+    }
+    public void setNext(Node<E> n){
+      next = n;
+    }
 
+  }
+private Node<E> head = null;
+private Node<E> tail = null;
+private int size= 0;
+
+public boolean isEmpty(){
+  return size == 0;
+}
+
+  {}
     /**
      * Constructs an empty list.
      */
-    public SimplyLinkedList() {
-    }
+    public SimplyLinkedList () {
+  }
 
     @Override
     public ListIterator<E> listIterator(int index) {
@@ -20,12 +47,23 @@ public class SimplyLinkedList<E>
 
     @Override
     public void addFirst(E e) {
-
+      head = new Node<>(e, head);
+      if(size == 0) {
+        tail = head;
+      }
+      size++;
     }
 
     @Override
     public void addLast(E e) {
-
+      Node<E> newNode = new Node<>(e, null);
+      if(isEmpty()) {
+        head = newNode;
+      }else{
+        tail.setNext(newNode);
+      }
+      tail = newNode;
+      size++;
     }
 
     @Override
@@ -40,7 +78,16 @@ public class SimplyLinkedList<E>
 
     @Override
     public E removeFirst() {
+      if (isEmpty()){
         return null;
+      }
+      E answer = head.getElement();
+      head = head.getNext();
+      size--;
+      if(size ==0) {
+        tail = null;
+      }
+      return answer;
     }
 
     @Override
@@ -60,12 +107,17 @@ public class SimplyLinkedList<E>
 
     @Override
     public E getFirst() {
-        return null;
+    if (isEmpty()) {
+      return null;
+        }
+     return head.getElement();
     }
-
     @Override
     public E getLast() {
-        return null;
+    if (isEmpty()) {
+      return null;
+        }
+    return tail.getElement();
     }
 
     @Override
