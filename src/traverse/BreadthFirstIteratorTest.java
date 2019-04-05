@@ -25,17 +25,20 @@ class BreadthFirstIteratorTest {
 
     MapMatrix mapMatrix = new MapMatrix(matrix);
 
-    BreadthFirstIterator it = new BreadthFirstIterator<>(mapMatrix, matrix[0][0], matrix[3][3]);
+    var it = new CrossIterator(new BreadthFirstIterator<>(), mapMatrix, matrix[0][0]);
+
     assertTrue(it.hasNext());
 
     while (it.hasNext()) {
       System.out.println(it.next());
     }
 
-    System.out.println("path:");
-    var steps = it.path();
-    for (var s : steps) {
-      System.out.println(s);
-    }
+    var itSearch = new SearchIterator<>(matrix[3][3], it);
+
+//    System.out.println("path:");
+//    var steps = it.path();
+//    for (var s : steps) {
+//      System.out.println(s);
+//    }
   }
 }

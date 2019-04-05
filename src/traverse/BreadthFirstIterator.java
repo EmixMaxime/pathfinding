@@ -5,44 +5,37 @@ import java.util.Deque;
 import java.util.Map;
 import java.util.Objects;
 
-public class BreadthFirstIterator<S>
-    extends CrossIterator<S, BreadthFirstIterator.SearchNodeData<S>> {
+public class BreadthFirstIterator<S> implements ExplorableIterator<S> {
 
   private Deque<S> queue = new ArrayDeque<>();
 
-  public BreadthFirstIterator(Explorable<S> explorable, S startStep) {
-    super(explorable, startStep);
-  }
-
-  public BreadthFirstIterator(Explorable<S> explorable, S startStep, S endStep) {
-    super(explorable, startStep, endStep);
-  }
-
-  public BreadthFirstIterator(
-      Explorable<S> explorable, S startStep, Map<S, SearchNodeData<S>> seen, S endStep) {
-    super(explorable, startStep, seen, endStep);
-  }
-
   /** {@inheritDoc} */
-  protected S nextStep() {
+  public S nextStep() {
     return queue.removeFirst();
   }
 
-  protected boolean isConnectedComponentExhausted() {
+  public boolean isConnectedComponentExhausted() {
     return queue.isEmpty();
   }
 
-  protected void encounterStep(S step, S fromStep) {
+  /**
+   * Pb: je peux retourner une Map pour récupérer la valeur dans CrossIterator => pb: CrossIterator
+   * a un type générique qui ne va pas forcément correspondre au type d'ici => erreur
+   *
+   * @param step the step encountered
+   * @param fromStep the step via which the step was encountered, or null if the step is a starting
+   */
+  public void encounterStep(S step, S fromStep) {
     Objects.requireNonNull(step);
     // when fromStep == null, it's the start step , so I have a depth of 0.
-    int depth = (fromStep == null ? 0 : getSeenData(fromStep).depth + 1);
+    //    int depth = (fromStep == null ? 0 : getSeenData(fromStep).depth + 1);
 
-    putSeenData(step, new SearchNodeData<>(fromStep, depth));
+    //    putSeenData(step, new SearchNodeData<>(fromStep, depth));
     queue.add(step);
   }
 
   /** {@inheritDoc} */
-  protected void encounterStepAgain(S step, S stepFrom) {}
+  public void encounterStepAgain(S step, S stepFrom) {}
 
   /**
    * Returns the depth of step in the data structure. The depth of a step is defined as the number
@@ -52,10 +45,10 @@ public class BreadthFirstIterator<S>
    * @param step step
    * @return depth of step in the data structure.
    */
-  public int getDepth(S step) {
-    assert getSeenData(step) != null;
-    return getSeenData(step).depth;
-  }
+  //  public int getDepth(S step) {
+  //    assert getSeenData(step) != null;
+  //    return getSeenData(step).depth;
+  //  }
 
   /**
    * Little class to encapsulate data about StepInterface that's been traversed.

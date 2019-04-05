@@ -3,7 +3,7 @@ package traverse;
 import java.util.*;
 
 /** @param <S> type of steps. */
-public abstract class CrossIterator<S, D extends TracableStep<S>> implements Iterator<S> {
+public class CrossIterator<S, D> implements Iterator<S> {
 
   /**
    * Stores the steps that have been seen during iteration and (optionally) some additional
@@ -13,10 +13,10 @@ public abstract class CrossIterator<S, D extends TracableStep<S>> implements Ite
   private Map<S, D> seen;
 
   private S startStep;
-  private S endStep;
-  private boolean foundEndStep = false;
 
   private Explorable<S> explorable;
+
+  private ExplorableIterator<S> explorableIterator;
 
   /**
    * The default seen data structure is HashMap.
@@ -24,27 +24,16 @@ public abstract class CrossIterator<S, D extends TracableStep<S>> implements Ite
    * @param explorable explorable data structure.
    * @param startStep startStep
    */
-  public CrossIterator(Explorable<S> explorable, S startStep) {
-    this(explorable, startStep, new HashMap<>(), null);
+  public CrossIterator(ExplorableIterator<S> explorableIterator, Explorable<S> explorable, S startStep) {
+    this(explorableIterator, explorable, startStep, new HashMap<>());
   }
 
-  public CrossIterator(Explorable<S> explorable, S startStep, S endStep) {
-    this(explorable, startStep, new HashMap<>(), endStep);
-  }
-
-  public CrossIterator(Explorable<S> explorable, S startStep, Map<S, D> seen, S endStep) {
+  public CrossIterator(ExplorableIterator<S> explorableIterator, Explorable<S> explorable, S startStep, Map<S, D> seen) {
     this.explorable = explorable;
     this.startStep = startStep;
-    this.endStep = endStep;
     this.seen = seen;
+    this.explorableIterator = explorableIterator;
   }
-
-  /**
-   * Depends on the Iterator, have to be defined.
-   *
-   * @return the next step to be iterated.
-   */
-  protected abstract S nextStep();
 
   /**
    * Determines whether a step has been seen yet by this traversal.
@@ -57,24 +46,16 @@ public abstract class CrossIterator<S, D extends TracableStep<S>> implements Ite
   }
 
   public boolean hasNext() {
-    if (foundEndStep) {
-      return false;
-    }
-
     if (startStep != null) {
       encounterStartStep();
     }
 
-    if (!isConnectedComponentExhausted()) {
+    if (!explorableIterator.isConnectedComponentExhausted()) {
       return true;
     } else {
       // @TODO strategy for graph with multiple components.
       return false;
     }
-  }
-
-  private boolean isEndStep(S step) {
-    return endStep != null && step.equals(endStep);
   }
 
   public S next() {
@@ -83,14 +64,8 @@ public abstract class CrossIterator<S, D extends TracableStep<S>> implements Ite
     }
 
     if (hasNext()) {
-      S nextStep = nextStep();
-
-      if (!isEndStep(nextStep)) {
-        addUnseenStepsOf(nextStep);
-      } else {
-        foundEndStep = true;
-      }
-
+      S nextStep = explorableIterator.nextStep();
+      addUnseenStepsOf(nextStep);
       return nextStep;
     }
 
@@ -98,62 +73,18 @@ public abstract class CrossIterator<S, D extends TracableStep<S>> implements Ite
   }
 
   private void encounterStartStep() {
-    encounterStep(startStep, null);
+    explorableIterator.encounterStep(startStep, null);
     startStep = null;
   }
-
-  /**
-   * For graph data structure, could have multiple components (see "linked graph).
-   *
-   * @return <tt>true</tt> if there are no more un-iterated steps in the currently iterated
-   *     connected component.
-   */
-  protected abstract boolean isConnectedComponentExhausted();
-
-  /**
-   * Update data structures the first time we see a step.
-   *
-   * @param step the step encountered
-   * @param fromStep the step via which the step was encountered, or null if the step is a starting
-   *     point
-   */
-  protected abstract void encounterStep(S step, S fromStep);
-
-  /**
-   * Called whenever we re-encounter a step. The default implementation does nothing. Could be used
-   * to optimize the path.s
-   *
-   * @param step the step re-encountered
-   * @param stepFrom the step via which the step was re-encountered
-   */
-  protected abstract void encounterStepAgain(S step, S stepFrom);
 
   private void addUnseenStepsOf(S fromStep) {
     for (S step : explorable.getReachableStepsFrom(fromStep)) {
       if (isSeenStep(step)) {
-        encounterStepAgain(step, fromStep);
+        explorableIterator.encounterStepAgain(step, fromStep);
       } else {
-        encounterStep(step, fromStep);
+        explorableIterator.encounterStep(step, fromStep);
       }
     }
-  }
-
-  public List<S> path() {
-    if (endStep == null) {
-      return null;
-    }
-
-    ArrayList<S> path = new ArrayList<>();
-    D endStepData = getSeenData(endStep);
-
-    S predecessor = endStepData.getPredecessor();
-
-    while (predecessor != null) {
-      path.add(predecessor);
-      predecessor = getSeenData(predecessor).getPredecessor();
-    }
-
-    return path;
   }
 
   /**
