@@ -26,6 +26,11 @@ public class MapBuilder {
     this.readAndCreateMatrix();
   }
 
+  /**
+   * get the numbers from a string
+   * @param str
+   * @return
+   */
   private int[] extractNumbersFromStr(String str) {
     return Pattern.compile("[0-9]+")
         .matcher(str)
@@ -36,6 +41,8 @@ public class MapBuilder {
   }
 
   /**
+   * Create a Map from a file.
+   *
    * First line is the title of the map. 2e 3e 4e info about the size of the map 5e to the end is
    * the map.
    */
@@ -44,6 +51,7 @@ public class MapBuilder {
       String line = null;
       int lineNumber = 0;
 
+      // lines 1 to 4 are metadata default = map
       while ((line = reader.readLine()) != null) {
         lineNumber++;
 
@@ -52,8 +60,18 @@ public class MapBuilder {
             this.map.setTitle(line);
             break;
           case 2:
+            int[] coordsStart = extractNumbersFromStr(line);
+
+            map.setStartX(coordsStart[0]);
+            map.setStartY(coordsStart[1]);
+
             break;
           case 3:
+            int[] coordsEnd = extractNumbersFromStr(line);
+
+            map.setEndX(coordsEnd[0]);
+            map.setEndY(coordsEnd[1]);
+
             break;
           case 4:
             int[] coords = extractNumbersFromStr(line);
@@ -61,17 +79,15 @@ public class MapBuilder {
             int rows = coords[0];
             int columns = coords[1];
 
-            this.matrix = new int[columns][rows];
+            this.matrix = new int[rows][columns];
 
-            System.out.println(Arrays.toString(coords));
             break;
           default:
-             System.out.println(line);
-
+            for(int i = 0; i < this.matrix[0].length; ++i){
+              this.matrix[lineNumber-5][i] = line.charAt(i);
+            }
         }
       }
-
-      System.out.println(map.getTitle());
 
     } catch (NoSuchFileException e) {
       System.err.format("Map file text '%s' doesn't exist.", e.getMessage());
@@ -79,4 +95,8 @@ public class MapBuilder {
       System.err.format("IOException: ", x);
     }
   }
+
+  public Path getPath(){return file;}
+  public MapInformation getMapInformation(){return map;}
+  public int[][] getMatrix(){return matrix;}
 }
