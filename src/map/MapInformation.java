@@ -15,15 +15,35 @@ public class MapInformation {
     this.title = title;
   }
 
-  public int getStartX(){ return startX;}
-  public int getStartY(){ return startY;}
+  public int getStartX() {
+    return startX;
+  }
 
-  public void setStartX(int x){ startX = x;}
-  public void setStartY(int y){ startY = y;}
+  public int getStartY() {
+    return startY;
+  }
 
-  public int getEndX(){ return endX;}
-  public int getEndY(){ return endY;}
+  public void setStartX(int x) {
+    startX = x;
+  }
 
-  public void setEndX(int x){ endX = x;}
-  public void setEndY(int y){ endY = y;}
+  public void setStartY(int y) {
+    startY = y;
+  }
+
+  public int getEndX() {
+    return endX;
+  }
+
+  public int getEndY() {
+    return endY;
+  }
+
+  public void setEndX(int x) {
+    endX = x;
+  }
+
+  public void setEndY(int y) {
+    endY = y;
+  }
 }
