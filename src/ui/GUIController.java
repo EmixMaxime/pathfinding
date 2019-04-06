@@ -124,12 +124,11 @@ public class GUIController {
             System.out.println(it.next());
           }
 
-          //          var list = it.path();
-          //          for (var item : list) {
-          //            System.out.println("x,y of path " + item.getX() + " " + item.getY());
-          //            maze.getChildren().set(computeIndexFromXY(item.getCoords()), new
-          // ImageView(perso));
-          //          }
+          var list = it.path();
+          for (var item : list) {
+            System.out.println("x,y of path " + item.getX() + " " + item.getY());
+            maze.getChildren().set(computeIndexFromXY(item.getCoords()), new ImageView(perso));
+          }
         }
 
         @Override

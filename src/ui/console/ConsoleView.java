@@ -4,17 +4,17 @@ import map.MapBuilder;
 import map.MapSearch;
 import traverse.BreadthFirstIterator;
 
-public class ConsoleView {
+class ConsoleView {
 
   private MapSearch mapSearch;
   private MapBuilder mapBuilder;
 
-  public ConsoleView(MapBuilder mapBuilder) {
+  ConsoleView(MapBuilder mapBuilder) {
     this.mapSearch = mapBuilder.getMapSearch();
     this.mapBuilder = mapBuilder;
   }
 
-  public void show() {
+  void show() {
     var map = mapBuilder.getRawMatrix();
 
     // add entrance/exit points
