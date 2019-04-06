@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
@@ -19,13 +20,11 @@ public class MapBuilder {
   private char[][] matrix;
 
   public MapBuilder(String mapName) {
-    this.mapSearch = new MapSearch();
     this.file = Paths.get(mapName);
     this.readAndCreateMatrix();
-    this.toMapMatrix();
   }
 
-  private void toMapMatrix() {
+  private MapMatrix toMapMatrix(char[][] matrix) {
     Step2D<MapMatrix.Values>[][] mapMatrix = new Step2D[matrix.length][matrix[0].length];
 
     for (int y = 0; y < matrix[0].length; y++) {
@@ -38,7 +37,7 @@ public class MapBuilder {
       }
     }
 
-    mapSearch.setMap(new MapMatrix(mapMatrix));
+    return new MapMatrix(mapMatrix);
   }
 
   /**
@@ -64,6 +63,9 @@ public class MapBuilder {
    */
   private void readAndCreateMatrix() {
     try (BufferedReader reader = Files.newBufferedReader(file)) {
+      MapMatrix map = null;
+      Coords2D start = null, goal = null;
+
       String line;
       int lineNumber = 0;
       int yLine = 0;
@@ -75,17 +77,14 @@ public class MapBuilder {
         switch (lineNumber) {
           case 1:
             // @TODO store the title somewhere.
-            //            this.map.setTitle(line);
             break;
           case 2:
             int[] coordsStart = extractNumbersFromStr(line);
-            Coords2D start = new Coords2D(coordsStart[1], coordsStart[0]);
-            mapSearch.setStart(start);
+            start = new Coords2D(coordsStart[1], coordsStart[0]);
             break;
           case 3:
             int[] coordsEnd = extractNumbersFromStr(line);
-            Coords2D goal = new Coords2D(coordsEnd[1], coordsEnd[0]);
-            mapSearch.setGoal(goal);
+            goal = new Coords2D(coordsEnd[1], coordsEnd[0]);
             break;
           case 4:
             int[] coords = extractNumbersFromStr(line);
@@ -106,10 +105,17 @@ public class MapBuilder {
         }
       }
 
+      Objects.requireNonNull(matrix);
+      Objects.requireNonNull(start);
+      Objects.requireNonNull(goal);
+
+      MapMatrix mapMatrix = toMapMatrix(matrix);
+      this.mapSearch = new MapSearch(mapMatrix, start, goal);
+
     } catch (NoSuchFileException e) {
       System.err.format("Map file text '%s' doesn't exist.", e.getMessage());
     } catch (IOException x) {
-      System.err.format("IOException: ", x);
+      System.err.format("IOException: %s", x.getMessage());
     }
   }
 
@@ -117,7 +123,7 @@ public class MapBuilder {
     return file;
   }
 
-  public char[][] getMatrix() {
+  public char[][] getRawMatrix() {
     return matrix;
   }
 

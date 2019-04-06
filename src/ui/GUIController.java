@@ -34,7 +34,7 @@ public class GUIController {
     @Override
     protected Task<MapSearch> createTask() {
 
-      return new Task<MapSearch>() {
+      return new Task<>() {
         private int computeIndexFromXY(Coords2D coords) {
           return (int) ((coords.getY() * (maze.getPrefColumns() - 1)) + coords.getX());
         }
@@ -44,62 +44,60 @@ public class GUIController {
           MapSearch mapSearch = getValue();
           var mapMatrix = mapSearch.getMap();
 
-          Image road =
-            null;
+          Image road = null;
           try {
-            road = new Image(
-                new FileInputStream("resources/imgs/sand_tile.png"),
-                xTileSize,
-                yTitleSize,
-                true,
-                false);
-          } catch (FileNotFoundException e) {
-            e.printStackTrace();
-          }
-
-          Image obstacle =
-            null;
-          try {
-            obstacle = new Image(
-                new FileInputStream("resources/imgs/grass_tile_1.png"),
-                xTileSize,
-                yTitleSize,
-                true,
-                false);
-          } catch (FileNotFoundException e) {
-            e.printStackTrace();
-          }
-
-          //    Image path = new Image(new FileInputStream("resources/imgs/path.png"));
-
-          Image perso =
-            null;
-          try {
-            perso = new Image(
-                new FileInputStream("resources/imgs/perso.png"),
-                xTileSize,
-                yTitleSize,
-                true,
-                false);
-          } catch (FileNotFoundException e) {
-            e.printStackTrace();
-          }
-
-          ImageView win =
-            null;
-          try {
-            win = new ImageView(
+            road =
                 new Image(
-                    new FileInputStream("resources/imgs/gem.png"),
+                    new FileInputStream("resources/imgs/sand_tile.png"),
                     xTileSize,
                     yTitleSize,
                     true,
-                    false));
+                    false);
           } catch (FileNotFoundException e) {
             e.printStackTrace();
           }
 
-          //     Add things into the grid. Obstacle or road!
+          Image obstacle = null;
+          try {
+            obstacle =
+                new Image(
+                    new FileInputStream("resources/imgs/grass_tile_1.png"),
+                    xTileSize,
+                    yTitleSize,
+                    true,
+                    false);
+          } catch (FileNotFoundException e) {
+            e.printStackTrace();
+          }
+
+          Image perso = null;
+          try {
+            perso =
+                new Image(
+                    new FileInputStream("resources/imgs/perso.png"),
+                    xTileSize,
+                    yTitleSize,
+                    true,
+                    false);
+          } catch (FileNotFoundException e) {
+            e.printStackTrace();
+          }
+
+          ImageView win = null;
+          try {
+            win =
+                new ImageView(
+                    new Image(
+                        new FileInputStream("resources/imgs/gem.png"),
+                        xTileSize,
+                        yTitleSize,
+                        true,
+                        false));
+          } catch (FileNotFoundException e) {
+            e.printStackTrace();
+          }
+
+          // Add things into the grid. Obstacle or road!
           for (int y = 0; y < mapMatrix.getYSize(); y++) {
             for (int x = 0; x < mapMatrix.getXSize(); x++) {
               if (mapMatrix.isWalkable(x, y) != null) {
@@ -110,7 +108,6 @@ public class GUIController {
                 maze.getChildren().add(img);
               }
             }
-            System.out.println();
           }
 
           var start = mapSearch.getStart();
@@ -127,12 +124,12 @@ public class GUIController {
             System.out.println(it.next());
           }
 
-          //    var list = it.path();
-          //    for (var item : list) {
-          //      System.out.println("x,y of path " + item.getX() + " " + item.getY());
-          //      //          maze.getChildren().set(computeIndexFromXY(item.getCoords()), new
-          //      // ImageView(perso));
-          //    }
+          //          var list = it.path();
+          //          for (var item : list) {
+          //            System.out.println("x,y of path " + item.getX() + " " + item.getY());
+          //            maze.getChildren().set(computeIndexFromXY(item.getCoords()), new
+          // ImageView(perso));
+          //          }
         }
 
         @Override
@@ -191,7 +188,7 @@ public class GUIController {
     String algoName = algoSelector.getValue();
     String mapName = mapSelector.getValue();
 
-    maze.getChildren().removeAll();
+    maze.getChildren().clear();
 
     //    assertMapExists(mapName);
 

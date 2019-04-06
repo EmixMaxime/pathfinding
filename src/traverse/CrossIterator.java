@@ -1,6 +1,7 @@
 package traverse;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /** @param <S> type of steps. */
 public abstract class CrossIterator<S, D extends TracableStep<S>> implements Iterator<S> {
@@ -25,11 +26,11 @@ public abstract class CrossIterator<S, D extends TracableStep<S>> implements Ite
    * @param startStep startStep
    */
   public CrossIterator(Explorable<S> explorable, S startStep) {
-    this(explorable, startStep, new HashMap<>(), null);
+    this(explorable, startStep, new ConcurrentHashMap<>(), null);
   }
 
   public CrossIterator(Explorable<S> explorable, S startStep, S endStep) {
-    this(explorable, startStep, new HashMap<>(), endStep);
+    this(explorable, startStep, new ConcurrentHashMap<>(), endStep);
   }
 
   public CrossIterator(Explorable<S> explorable, S startStep, Map<S, D> seen, S endStep) {

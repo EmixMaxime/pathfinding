@@ -8,11 +8,9 @@ import plan.Coords2D;
  */
 public class MapSearch {
 
-  private MapMatrix map;
+  private final MapMatrix map;
   private Coords2D start;
   private Coords2D goal;
-
-  public MapSearch() {}
 
   public MapSearch(MapMatrix map, Coords2D start, Coords2D goal) {
     this.map = map;
@@ -38,9 +36,5 @@ public class MapSearch {
 
   public MapMatrix getMap() {
     return map;
-  }
-
-  public void setMap(MapMatrix map) {
-    this.map = map;
   }
 }

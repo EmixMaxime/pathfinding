@@ -1,11 +1,8 @@
 package ui.console;
 
 import map.MapBuilder;
-import map.MapMatrix;
 import map.MapSearch;
-import plan.Step2D;
 import traverse.BreadthFirstIterator;
-import ui.MapSearchSupplier;
 
 public class ConsoleView {
 
@@ -18,7 +15,7 @@ public class ConsoleView {
   }
 
   public void show() {
-    var map = mapBuilder.getMatrix();
+    var map = mapBuilder.getRawMatrix();
 
     // add entrance/exit points
     var start = mapSearch.getStart();
