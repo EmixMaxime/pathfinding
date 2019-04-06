@@ -1,11 +1,11 @@
 package ui;
 
-import map.MapMatrix;
+import map.MapBuilder;
 
 public class MapProvider implements MapSupplier {
 
   @Override
-  public MapMatrix get() {
-    return null;
+  public MapBuilder get(String name) {
+    return new MapBuilder(name);
   }
 }

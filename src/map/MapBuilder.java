@@ -3,12 +3,15 @@ package map;
 import plan.Step2D;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
@@ -19,13 +22,9 @@ public class MapBuilder {
   private MapMatrix mapMatrix;
   private char[][] matrix;
 
-  public MapBuilder() {
-    this("map");
-  }
-
   public MapBuilder(String mapName) {
+    this.file = Paths.get(mapName);
     this.map = new MapInformation();
-    this.file = Paths.get("resources/" + mapName + ".txt");
     this.readAndCreateMatrix();
     this.toMapMatrix();
   }

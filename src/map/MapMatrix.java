@@ -87,7 +87,7 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
    * @param y
    * @return the step if walkable or null.
    */
-  private Step2D<Values> isWalkable(int x, int y) {
+  public Step2D<Values> isWalkable(int x, int y) {
     if ((x >= 0 && x < xSize) && (y >= 0 && y < ySize)) {
       // Get the step & test it.
       var step = matrix[x][y];

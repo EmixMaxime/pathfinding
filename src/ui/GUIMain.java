@@ -11,6 +11,9 @@ import java.io.IOException;
 
 public class GUIMain extends Application {
 
+  public final static int WIDTH = 1300;
+  public final static int HEIGHT = 700;
+
   public static void main(String[] args) {
     launch(args);
   }
@@ -23,7 +26,7 @@ public class GUIMain extends Application {
     Parent root = loader.load();
 
     primaryStage.setTitle("Hello World");
-    primaryStage.setScene(new Scene(root));
+    primaryStage.setScene(new Scene(root, WIDTH, HEIGHT));
     primaryStage.show();
   }
 }
