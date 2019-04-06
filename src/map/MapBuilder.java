@@ -14,7 +14,7 @@ public class MapBuilder {
 
   private Path file;
   private MapInformation map;
-  private int[][] matrix;
+  private char[][] matrix;
 
   public MapBuilder() {
     this("map");
@@ -80,7 +80,7 @@ public class MapBuilder {
             int rows = coords[0];
             int columns = coords[1];
 
-            this.matrix = new int[rows][columns];
+            this.matrix = new char[rows][columns];
 
             break;
           default:
@@ -105,7 +105,7 @@ public class MapBuilder {
     return map;
   }
 
-  public int[][] getMatrix() {
+  public char[][] getMatrix() {
     return matrix;
   }
 }
