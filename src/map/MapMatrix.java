@@ -3,7 +3,6 @@ package map;
 import traverse.Explorable;
 import plan.Step2D;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -53,6 +52,13 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
     return data == Values.OBSTACLE;
   }
 
+  /**
+   * This method is specific to Matrix data structure.
+   *
+   * @param from
+   * @param direction
+   * @return
+   */
   private Step2D<Values> isWalkable(Step2D<Values> from, Directions direction) {
     int x = from.getX(), y = from.getY();
 
@@ -75,6 +81,8 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
   }
 
   /**
+   * This method is specific to the matrix.
+   *
    * @param x
    * @param y
    * @return the step if walkable or null.
@@ -111,5 +119,23 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
     }
 
     return reachable;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder str = new StringBuilder();
+
+    for (Step2D<Values>[] chars : matrix) {
+      for (int j = 0; j < matrix[0].length; ++j) {
+        str.append(chars[j]).append(" ");
+      }
+      str.append("\n");
+    }
+
+    return str.toString();
+  }
+
+  public Step2D<Values> getElement(int x, int y) {
+    return matrix[x][y];
   }
 }

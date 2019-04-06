@@ -26,10 +26,9 @@ class MapBuilderTest {
     assertEquals(expected_name, map.getMapInformation().getTitle());
     assertEquals(path, map.getPath());
 
-
-    for (int i = 0; i < map.getMatrix().length; ++i){
-      for (int j = 0; j < map.getMatrix()[0].length; ++j){
-        System.out.print((char) (map.getMatrix()[i][j]));
+    for (int i = 0; i < map.getMatrix().length; ++i) {
+      for (int j = 0; j < map.getMatrix()[0].length; ++j) {
+        System.out.print((map.getMatrix()[i][j]));
       }
       System.out.println();
     }
