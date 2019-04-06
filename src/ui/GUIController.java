@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
+import map.MapBuilder;
 import map.MapMatrix;
 import map.MapSearch;
 import plan.Coords2D;
@@ -135,7 +136,7 @@ public class GUIController {
         @Override
         protected MapSearch call() throws Exception {
           System.out.println("call in thread for map " + mapName);
-          MapSearch mapSearch = mapSearchSupplier.get(mapName);
+          MapSearch mapSearch = new MapBuilder("resources\\map3.txt").getMapSearch();
 
           maze.setPrefColumns(mapSearch.getMap().getXSize());
           maze.setPrefRows(mapSearch.getMap().getYSize());
@@ -163,7 +164,6 @@ public class GUIController {
   private MapService mapService = new MapService();
 
   private MapSearchSupplier mapSearchSupplier;
-  private MapSearch mapSearch;
 
   @FXML ChoiceBox<String> mapSelector, algoSelector;
   @FXML private Button runBtn;
@@ -202,13 +202,13 @@ public class GUIController {
   @FXML
   public void initialize() throws FileNotFoundException {
     // Populate mapSelector
-    ObservableList<String> data = FXCollections.observableList(availableMaps);
+//    ObservableList<String> data = FXCollections.observableList(availableMaps);
 
     runBtn.setOnMouseClicked(this::runPathFinding);
 
     // set default selected value.
-    mapSelector.setValue(availableMaps.get(DEFAULT_MAP_INDEX));
-    mapSelector.setItems(data);
+//    mapSelector.setValue(availableMaps.get(DEFAULT_MAP_INDEX));
+//    mapSelector.setItems(data);
 
     //    mapSelector
     //        .getSelectionModel()
