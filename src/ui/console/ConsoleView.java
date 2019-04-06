@@ -39,7 +39,7 @@ public class ConsoleView {
     var it = new BreadthFirstIterator<>(mapSearch.getMap(), s, g);
 
     while (it.hasNext()) {
-      it.next();
+      System.out.println(it.next());
     }
 
     var path = it.path();
