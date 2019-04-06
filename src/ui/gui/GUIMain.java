@@ -1,4 +1,4 @@
-package ui;
+package ui.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +16,7 @@ public class GUIMain extends Application {
 
   @Override
   public void start(Stage primaryStage) throws IOException {
-    Parent root = FXMLLoader.load(getClass().getResource("gui.fxml"));
+    Parent root = FXMLLoader.load(getClass().getResource("gui/gui.fxml"));
 
     primaryStage.setTitle("Hello World");
     primaryStage.setScene(new Scene(root, 600, 475));
