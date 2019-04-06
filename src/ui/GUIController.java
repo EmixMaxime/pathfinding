@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import map.MapBuilder;
 import map.MapInformation;
+import traverse.BreadthFirstIterator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -101,6 +102,7 @@ public class GUIController {
 
   private void drawMaze() throws FileNotFoundException {
     var mapMatrix = mapBuilder.getMapMatrix();
+    var info = mapBuilder.getMapInformation();
 
     Image road =
         new Image(
@@ -118,6 +120,17 @@ public class GUIController {
             true,
             false);
 
+    ImageView perso =
+      new ImageView(
+        new Image(
+            new FileInputStream("resources/imgs/perso.png"), xTileSize, yTitleSize, true, false));
+
+    ImageView win =
+      new ImageView(
+        new Image(
+            new FileInputStream("resources/imgs/gem.png"), xTileSize, yTitleSize, true, false));
+
+    // Add things into the grid. Obstacle or road!
     for (int x = 0; x < mapMatrix.getXSize(); x++) {
       for (int y = 0; y < mapMatrix.getYSize(); y++) {
         if (mapMatrix.isWalkable(x, y) != null) {
@@ -129,6 +142,11 @@ public class GUIController {
         }
       }
     }
+
+    new BreadthFirstIterator<>(mapMatrix, )
+
+    maze.getChildren().set(info.getEndX() * info.getEndY(), win);
+    maze.getChildren().set(info.getStartX() * info.getStartY(), perso);
 
     //    maze.getChildren().add(img);
     //    maze.getChildren().add(img);
