@@ -1,5 +1,7 @@
 package map;
 
+import plan.Step2D;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,6 +16,7 @@ public class MapBuilder {
 
   private Path file;
   private MapInformation map;
+  private MapMatrix mapMatrix;
   private char[][] matrix;
 
   public MapBuilder() {
@@ -24,6 +27,23 @@ public class MapBuilder {
     this.map = new MapInformation();
     this.file = Paths.get("resources/" + mapName + ".txt");
     this.readAndCreateMatrix();
+    this.toMapMatrix();
+  }
+
+  private void toMapMatrix() {
+    Step2D<MapMatrix.Values>[][] mapMatrix = new Step2D[matrix.length][matrix[0].length];
+
+    for (int x = 0; x < matrix.length; x++) {
+      for (int y = 0; y < matrix[0].length; y++) {
+        if (matrix[x][y] == ' ') {
+          mapMatrix[x][y] = new Step2D<>(x, y, MapMatrix.Values.ROAD);
+        } else {
+          mapMatrix[x][y] = new Step2D<>(x, y, MapMatrix.Values.OBSTACLE);
+        }
+      }
+    }
+
+    this.mapMatrix = new MapMatrix(mapMatrix);
   }
 
   /**
@@ -107,5 +127,9 @@ public class MapBuilder {
 
   public char[][] getMatrix() {
     return matrix;
+  }
+
+  public MapMatrix getMapMatrix() {
+    return mapMatrix;
   }
 }
