@@ -116,10 +116,11 @@ public class GUIController {
           maze.getChildren().set(computeIndexFromXY(start), new ImageView(perso));
           maze.getChildren().set(computeIndexFromXY(end), win);
 
-          var s = mapSearch.getMap().getElement(mapSearch.getStart());
-          var g = mapSearch.getMap().getElement(mapSearch.getGoal());
+          var map = mapSearch.getMap();
+          var s = map.getElement(start);
+          var g = map.getElement(end);
 
-          var it = new BreadthFirstIterator<>(mapSearch.getMap(), s, g);
+          var it = new BreadthFirstIterator<>(map, s, g);
           while (it.hasNext()) {
             System.out.println(it.next());
           }
@@ -150,7 +151,8 @@ public class GUIController {
 
         @Override
         protected void failed() {
-          System.out.println("FAILED " + Arrays.toString(getException().getStackTrace()));
+          // @TODO handle this!
+          System.out.println("FAILED IN THREAD" + Arrays.toString(getException().getStackTrace()));
         }
       };
     }
