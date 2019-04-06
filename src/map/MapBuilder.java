@@ -28,6 +28,7 @@ public class MapBuilder {
 
   /**
    * get the numbers from a string
+   *
    * @param str
    * @return
    */
@@ -43,7 +44,7 @@ public class MapBuilder {
   /**
    * Create a Map from a file.
    *
-   * First line is the title of the map. 2e 3e 4e info about the size of the map 5e to the end is
+   * <p>First line is the title of the map. 2e 3e 4e info about the size of the map 5e to the end is
    * the map.
    */
   private void readAndCreateMatrix() {
@@ -83,8 +84,8 @@ public class MapBuilder {
 
             break;
           default:
-            for(int i = 0; i < this.matrix[0].length; ++i){
-              this.matrix[lineNumber-5][i] = line.charAt(i);
+            for (int i = 0; i < this.matrix[0].length; ++i) {
+              this.matrix[lineNumber - 5][i] = line.charAt(i);
             }
         }
       }
@@ -96,7 +97,15 @@ public class MapBuilder {
     }
   }
 
-  public Path getPath(){return file;}
-  public MapInformation getMapInformation(){return map;}
-  public int[][] getMatrix(){return matrix;}
+  public Path getPath() {
+    return file;
+  }
+
+  public MapInformation getMapInformation() {
+    return map;
+  }
+
+  public int[][] getMatrix() {
+    return matrix;
+  }
 }
