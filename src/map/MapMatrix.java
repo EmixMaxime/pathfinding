@@ -1,5 +1,6 @@
 package map;
 
+import plan.Coords2D;
 import traverse.Explorable;
 import plan.Step2D;
 
@@ -125,9 +126,9 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
   public String toString() {
     StringBuilder str = new StringBuilder();
 
-    for (Step2D<Values>[] chars : matrix) {
-      for (int j = 0; j < matrix[0].length; ++j) {
-        str.append(chars[j]).append(" ");
+    for (int y = 0; y < matrix[0].length; y++) {
+      for (int x = 0; x < matrix.length; x++) {
+        str.append(matrix[x][y]).append(" ");
       }
       str.append("\n");
     }
@@ -137,5 +138,9 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
 
   public Step2D<Values> getElement(int x, int y) {
     return matrix[x][y];
+  }
+
+  public Step2D<Values> getElement(Coords2D c) {
+    return getElement((int) c.getX(), (int) c.getY());
   }
 }

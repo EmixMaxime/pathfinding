@@ -1,6 +1,5 @@
 package ui;
 
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,8 +9,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
-import map.MapBuilder;
-import map.MapInformation;
+import map.MapMatrix;
+import map.MapSearch;
+import plan.Coords2D;
+import plan.Step2D;
 import traverse.BreadthFirstIterator;
 
 import java.io.File;
@@ -22,8 +23,10 @@ import java.util.*;
 
 public class GUIController {
 
-  private MapSupplier mapSupplier;
-  private MapBuilder mapBuilder;
+  private final int DEFAULT_MAP_INDEX = 2;
+
+  private MapSearchSupplier mapSearchSupplier;
+  private MapSearch mapSearch;
 
   @FXML ChoiceBox<String> mapSelector;
 
@@ -34,8 +37,8 @@ public class GUIController {
 
   private double xTileSize, yTitleSize;
 
-  public GUIController(MapSupplier mapSupplier) {
-    this.mapSupplier = mapSupplier;
+  public GUIController(MapSearchSupplier mapSearchSupplier) {
+    this.mapSearchSupplier = mapSearchSupplier;
 
     var files = getAvailableMaps();
     List<String> list = new ArrayList<>(files.length);
@@ -53,8 +56,8 @@ public class GUIController {
     ObservableList<String> data = FXCollections.observableList(availableMaps);
 
     // set default selected value.
-    mapSelector.setValue(availableMaps.get(3));
-    setMap(availableMaps.get(3));
+    mapSelector.setValue(availableMaps.get(DEFAULT_MAP_INDEX));
+    setMap(availableMaps.get(DEFAULT_MAP_INDEX));
     mapSelector.setItems(data);
 
     mapSelector
@@ -66,15 +69,16 @@ public class GUIController {
 
     // Create maze TilePane.
     maze = new TilePane(0, 0);
-    maze.setPrefColumns(mapBuilder.getMapMatrix().getYSize());
-    maze.setPrefRows(mapBuilder.getMapMatrix().getXSize());
+    maze.setPrefColumns(mapSearch.getMap().getXSize());
+    maze.setPrefRows(mapSearch.getMap().getYSize());
     mazeContainer.getChildren().add(maze);
 
-    int xSize = mapBuilder.getMapMatrix().getXSize();
-    int ySize = mapBuilder.getMapMatrix().getYSize();
+    int xSize = mapSearch.getMap().getXSize();
+    int ySize = mapSearch.getMap().getYSize();
 
-    xTileSize = GUIMain.WIDTH * 1.0 / xSize;
-    yTitleSize = GUIMain.HEIGHT * 1.0 / ySize;
+    // @TODO fix that computation...
+    xTileSize = (GUIMain.WIDTH * 1.0 / xSize);
+    yTitleSize = (GUIMain.HEIGHT * 1.0 / ySize);
     drawMaze();
   }
 
@@ -92,7 +96,7 @@ public class GUIController {
 
   private void setMap(String mapName) {
     assertMapExists(mapName);
-    this.mapBuilder = mapSupplier.get(mapName);
+    this.mapSearch = mapSearchSupplier.get(mapName);
     // @TODO to continue...
   }
 
@@ -100,9 +104,12 @@ public class GUIController {
     return new File("resources").listFiles((dir, name) -> name.endsWith(".txt"));
   }
 
+  private int computeIndexFromXY(Coords2D coords) {
+    return (int) ((coords.getY() * (maze.getPrefColumns() - 1)) + coords.getX());
+  }
+
   private void drawMaze() throws FileNotFoundException {
-    var mapMatrix = mapBuilder.getMapMatrix();
-    var info = mapBuilder.getMapInformation();
+    var mapMatrix = mapSearch.getMap();
 
     Image road =
         new Image(
@@ -120,19 +127,20 @@ public class GUIController {
             true,
             false);
 
-    ImageView perso =
-      new ImageView(
+    //    Image path = new Image(new FileInputStream("resources/imgs/path.png"));
+
+    Image perso =
         new Image(
-            new FileInputStream("resources/imgs/perso.png"), xTileSize, yTitleSize, true, false));
+            new FileInputStream("resources/imgs/perso.png"), xTileSize, yTitleSize, true, false);
 
     ImageView win =
-      new ImageView(
-        new Image(
-            new FileInputStream("resources/imgs/gem.png"), xTileSize, yTitleSize, true, false));
+        new ImageView(
+            new Image(
+                new FileInputStream("resources/imgs/gem.png"), xTileSize, yTitleSize, true, false));
 
-    // Add things into the grid. Obstacle or road!
-    for (int x = 0; x < mapMatrix.getXSize(); x++) {
-      for (int y = 0; y < mapMatrix.getYSize(); y++) {
+    //     Add things into the grid. Obstacle or road!
+    for (int y = 0; y < mapMatrix.getYSize(); y++) {
+      for (int x = 0; x < mapMatrix.getXSize(); x++) {
         if (mapMatrix.isWalkable(x, y) != null) {
           ImageView img = new ImageView(road);
           maze.getChildren().add(img);
@@ -141,14 +149,31 @@ public class GUIController {
           maze.getChildren().add(img);
         }
       }
+      System.out.println();
     }
 
-    new BreadthFirstIterator<>(mapMatrix, )
+    var start = mapSearch.getStart();
+    var end = mapSearch.getGoal();
 
-    maze.getChildren().set(info.getEndX() * info.getEndY(), win);
-    maze.getChildren().set(info.getStartX() * info.getStartY(), perso);
+    System.out.println("start " + start);
+    System.out.println("end " + end);
 
-    //    maze.getChildren().add(img);
-    //    maze.getChildren().add(img);
+    maze.getChildren().set(computeIndexFromXY(start), new ImageView(perso));
+    maze.getChildren().set(computeIndexFromXY(end), win);
+
+    var s = mapSearch.getMap().getElement(mapSearch.getStart());
+    var g = mapSearch.getMap().getElement(mapSearch.getGoal());
+
+    var it = new BreadthFirstIterator<>(mapSearch.getMap(), s, g);
+    while (it.hasNext()) {
+      System.out.println(it.next());
+    }
+
+//    var list = it.path();
+//    for (var item : list) {
+//      System.out.println("x,y of path " + item.getX() + " " + item.getY());
+//      //          maze.getChildren().set(computeIndexFromXY(item.getCoords()), new
+//      // ImageView(perso));
+//    }
   }
 }

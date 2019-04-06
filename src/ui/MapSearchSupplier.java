@@ -2,9 +2,10 @@ package ui;
 
 import map.MapBuilder;
 import map.MapMatrix;
+import map.MapSearch;
 
 import java.util.function.Supplier;
 
-public interface MapSupplier {
-  MapBuilder get(String name);
+public interface MapSearchSupplier {
+  MapSearch get(String name);
 }

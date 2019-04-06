@@ -1,7 +1,6 @@
 package ui;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,7 +20,7 @@ public class GUIMain extends Application {
   @Override
   public void start(Stage primaryStage) throws IOException {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("gui.fxml"));
-    loader.setControllerFactory(t -> new GUIController(new MapProvider()));
+    loader.setControllerFactory(t -> new GUIController(new MapSearchSearchProvider()));
 
     Parent root = loader.load();
 

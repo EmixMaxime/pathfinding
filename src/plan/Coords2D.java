@@ -35,4 +35,13 @@ public class Coords2D {
   public void setY(double y) {
     this.y = y;
   }
+
+  @Override
+  public String toString() {
+    return "(" + x + "," + y + ")";
+  }
+
+  public boolean equals(Coords2D c) {
+    return this.x == c.x && this.y == c.y;
+  }
 }

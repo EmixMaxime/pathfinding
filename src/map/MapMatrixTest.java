@@ -18,8 +18,8 @@ class MapMatrixTest {
 
   @Test
   void testXSizeYSize() {
-    int xSize = 5;
-    int ySize = 5;
+    int xSize = 15;
+    int ySize = 20;
 
     Step2D[][] matrix = new Step2D[xSize][ySize];
     MapMatrix mapMatrix = new MapMatrix(matrix);

@@ -2,55 +2,52 @@ package ui.console;
 
 import map.MapBuilder;
 import map.MapMatrix;
+import map.MapSearch;
 import plan.Step2D;
 import traverse.BreadthFirstIterator;
+import ui.MapSearchSupplier;
 
 public class ConsoleView {
 
-  private MapBuilder mapMatrix;
+  private MapSearch mapSearch;
+  private MapBuilder mapBuilder;
 
-  public ConsoleView(MapBuilder mapMatrix) {
-    this.mapMatrix = mapMatrix;
+  public ConsoleView(MapBuilder mapBuilder) {
+    this.mapSearch = mapBuilder.getMapSearch();
+    this.mapBuilder = mapBuilder;
   }
 
   public void show() {
-    var map = mapMatrix.getMatrix();
+    var map = mapBuilder.getMatrix();
 
     // add entrance/exit points
-    var info = mapMatrix.getMapInformation();
-    map[info.getEndX()][info.getEndY()] = 'B';
+    var start = mapSearch.getStart();
+    var goal = mapSearch.getGoal();
 
-    map[info.getStartX()][info.getStartY()] = 'A';
+    map[(int) start.getX()][(int) start.getY()] = 'A';
 
-    for (char[] chars : map) {
-      for (int j = 0; j < map[0].length; ++j) {
-        System.out.print((chars[j]));
-      }
-      System.out.println();
-    }
+    System.out.println(goal);
+    map[(int) goal.getX()][(int) goal.getY()] = 'B';
 
-    System.out.println(mapMatrix.getMapMatrix().toString());
+    System.out.println(mapBuilder.getMapSearch().getMap().getXSize());
 
-    var matrix = mapMatrix.getMapMatrix();
-    Step2D<MapMatrix.Values> start = matrix.getElement(info.getStartX(), info.getStartY());
-    Step2D<MapMatrix.Values> end = matrix.getElement(info.getEndX(), info.getEndY());
+    System.out.println(mapBuilder.matrixToString());
 
-    var it = new BreadthFirstIterator<>(matrix, start, end);
-    while(it.hasNext()) {
-//      System.out.println(it.next());
+    var s = mapSearch.getMap().getElement(mapSearch.getStart());
+    var g = mapSearch.getMap().getElement(mapSearch.getGoal());
+
+    var it = new BreadthFirstIterator<>(mapSearch.getMap(), s, g);
+
+    while (it.hasNext()) {
       it.next();
     }
 
     var path = it.path();
     for (var current : path) {
+      System.out.println("x,y of path " + current.getX() + " " + current.getY());
       map[current.getX()][current.getY()] = 'x';
     }
 
-    for (char[] chars : map) {
-      for (int j = 0; j < map[0].length; ++j) {
-        System.out.print((chars[j]));
-      }
-      System.out.println();
-    }
+    System.out.println(mapBuilder.matrixToString());
   }
 }
