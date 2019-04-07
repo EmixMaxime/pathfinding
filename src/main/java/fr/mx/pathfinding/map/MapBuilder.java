@@ -20,7 +20,7 @@ public class MapBuilder {
   private char[][] matrix;
 
   public MapBuilder(String mapName) {
-    this.file = Paths.get("/home/mx/Bureau/3il-graphs/src/main/resources/fr/mx/pathfinding" + mapName);
+    this.file = Paths.get(System.getProperty("user.dir") , "src/main/resources/fr/mx/pathfinding" + mapName);
     this.readAndCreateMatrix();
   }
 
