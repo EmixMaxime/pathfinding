@@ -16,15 +16,16 @@ public class MapSearchSearchProvider implements MapSearchSupplier {
 
   @Override
   public List<String> getAvailableMaps() {
-    File[] files = new File("resources").listFiles((dir, name) -> name.endsWith(".txt"));
+    // @TODO FIX THIS ABSOLUTE PATH !!
+    File[] files = new File("/home/mx/Bureau/3il-graphs/src/main/resources/fr/mx/pathfinding").listFiles((dir, name) -> name.endsWith(".txt"));
 
     if (files == null) {
-      throw new Error("No fr.mx.pathfinding.data_structure.map files found");
+      throw new Error("No map files found");
     }
 
     List<String> list = new ArrayList<>(files.length);
     for (File file : files) {
-      String toString = file.toString();
+      String toString = file.getName();
       list.add(toString);
     }
 

@@ -20,7 +20,7 @@ public class MapBuilder {
   private char[][] matrix;
 
   public MapBuilder(String mapName) {
-    this.file = Paths.get(mapName);
+    this.file = Paths.get("/home/mx/Bureau/3il-graphs/src/main/resources/fr/mx/pathfinding" + mapName);
     this.readAndCreateMatrix();
   }
 
@@ -70,7 +70,7 @@ public class MapBuilder {
       int lineNumber = 0;
       int yLine = 0;
 
-      // lines 1 to 4 are metadata default = fr.mx.pathfinding.data_structure.map
+      // lines 1 to 4 are metadata default = map
       while ((line = reader.readLine()) != null) {
         lineNumber++;
 
