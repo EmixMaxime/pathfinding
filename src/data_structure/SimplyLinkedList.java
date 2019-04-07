@@ -90,10 +90,24 @@ public boolean isEmpty(){
       return answer;
     }
 
-    @Override
-    public E removeLast() {
-        return null;
+  @Override
+  public E removeLast() {
+    Node<E> current = head;
+    Node<E> previous = head;
+    while (current != null) {
+      previous = current;
+      current = current.getNext();
+
+      if (tail == current) {
+        tail = previous;
+        tail.setNext(null);
+      }
     }
+      size--;
+      return tail.getElement();
+
+  }
+
 
     @Override
     public E pollFirst() {
