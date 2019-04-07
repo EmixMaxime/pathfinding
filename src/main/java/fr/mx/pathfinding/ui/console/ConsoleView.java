@@ -39,12 +39,12 @@ class ConsoleView {
       System.out.println(it.next());
     }
 
-//    var path = it.path();
-//    for (var current : path) {
-//      System.out.println("x,y of path " + current.getX() + " " + current.getY());
-//      fr.mx.pathfinding.data_structure.map[current.getX()][current.getY()] = 'x';
-//    }
+    var path = it.path();
+    for (var current : path) {
+      System.out.println("x,y of path " + current.getX() + " " + current.getY());
+      map[current.getX()][current.getY()] = 'x';
+    }
 
-//    System.out.println(mapBuilder.matrixToString());
+    System.out.println(mapBuilder.matrixToString());
   }
 }
