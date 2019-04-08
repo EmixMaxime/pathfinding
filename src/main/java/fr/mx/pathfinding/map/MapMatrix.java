@@ -65,10 +65,10 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
 
     switch (direction) {
       case TOP:
-        y = y + 1;
+        y = y - 1;
         break;
       case BOTTOM:
-        y = y - 1;
+        y = y + 1;
         break;
       case LEFT:
         x = x - 1;
