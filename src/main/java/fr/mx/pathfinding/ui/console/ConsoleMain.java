@@ -9,7 +9,6 @@ public class ConsoleMain {
     //MapBuilder map = new MapBuilder("/map.txt");
     //var c = new ConsoleView(map);
     var c = new ConsoleView();
-    c.menu();
     String chose;
     do {
       // See the class "Clavier"
