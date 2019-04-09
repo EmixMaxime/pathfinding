@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SimplyLinkedListTest {
 
-  private Deque<Integer> list;
+  private SimplyLinkedList<Integer> list;
 
   @org.junit.jupiter.api.BeforeEach
   void setUp() {
@@ -27,6 +27,7 @@ class SimplyLinkedListTest {
 
     list.addFirst(20);
     assertEquals(20, list.getFirst());
+    assertEquals(12, list.getLast());
   }
 
   @Test
