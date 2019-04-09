@@ -28,6 +28,12 @@ import java.util.*;
 public class Astar<S> {
   class NodeComparator implements Comparator<NodeData<S>> {
 
+    /**
+     * Compare two Node by the score
+     * @param nodeFirst
+     * @param nodeSecond
+     * @return
+     */
     public int compare(NodeData<S> nodeFirst, NodeData<S> nodeSecond) {
       if (nodeFirst.getfScore() > nodeSecond.getfScore()) return 1;
       if (nodeSecond.getfScore() > nodeFirst.getfScore()) return -1;
