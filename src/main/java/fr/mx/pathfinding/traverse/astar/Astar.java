@@ -104,7 +104,6 @@ public class Astar<S> implements AStarHeuristic {
             closedSet.add(current);
         }
         System.out.println("Chemin introuvable");
-        return;
     }
 
     /**
