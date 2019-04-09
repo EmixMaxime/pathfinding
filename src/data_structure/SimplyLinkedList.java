@@ -119,6 +119,18 @@ private int size= 0;
     }
 
   @Override
+  public E removeLast() {
+    Node<E> current = head;
+    Node<E> previous = head;
+    while (current != null) {
+      previous = current;
+      current = current.getNext();
+
+      if (tail == current) {
+        tail = previous;
+        tail.setNext(null);
+      }
+  @Override
   /**
    * Removes and returns the last element from this list.
    */
