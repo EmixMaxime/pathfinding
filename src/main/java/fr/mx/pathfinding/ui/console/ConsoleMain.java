@@ -14,7 +14,7 @@ public class ConsoleMain {
       // See the class "Clavier"
       chose = Clavier.lireString();
       c.run(chose);
-    }while(chose.intern() != "q");
+    } while (chose.intern() != "q");
   }
 }
 
