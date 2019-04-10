@@ -28,7 +28,12 @@ class AstarTest {
     AStarHeuristic heuristic2 = new AStarManhattanHeuristic();
     Astar astar2 = new Astar<>(heuristic2, map, map.getElement(start), map.getElement(end));
 
-//    astar.path();
+    var s = astar.path();
+    System.out.println(s.size());
+
+    for (var i : s) {
+      System.out.println(i);
+    }
 
   }
 

@@ -33,11 +33,6 @@ public class Astar<S> {
   private AStarHeuristic heuristic;
   private S endStep;
 
-//  @Override
-//  public double getCostEstimate(Object sourceStep, Object targetStep) {
-//    return fr.mx.pathfinding.plan.Coords2D.manhattanDistance((fr.mx.pathfinding.plan.Coords2D) sourceStep, (fr.mx.pathfinding.plan.Coords2D) targetStep);
-//  }
-
   class NodeComparator implements Comparator<NodeData<S>> {
 
     /**
@@ -88,7 +83,8 @@ public class Astar<S> {
       System.out.println("Open list not empty. " + current.step + " " + endStep);
 
       if (current.step.equals(endStep)) {
-        System.out.println("done");
+        closedSet.put(current.step, current);
+        System.out.println("done, is end step in closedSet?? " + closedSet.containsKey(endStep));
         //return path
         return;
       }
@@ -106,35 +102,10 @@ public class Astar<S> {
           openQueue.add(
             new NodeData<S>(
               step,
-              current.fromStep,
+              current.step,
               heuristic.getCostEstimate(step, endStep),
               gScore + 1));
         }
-
-//        if ((closedSet.containsKey(step) && closedSet.get(step).gScore < gScore) || (openQueue.stream().anyMatch(o -> o.gScore < gScore))) {
-//          System.out.println("Already seen this node." + step);
-//          //Ignore the neighboor which is already evaluated;
-//        } else {
-//          System.out.println("Discovered a new node." + step);
-//          openQueue.add(
-//            new NodeData<S>(
-//              step,
-//              current.fromStep,
-//              heuristic.getCostEstimate(step, endStep),
-//              gScore + 1));
-//        }
-
-        // discover a new step
-//        if (!openQueue.stream().anyMatch(o -> o.step.equals(step))) {
-//          System.out.println("Discovered a new node." + step);
-//          openQueue.add(
-//            new NodeData<S>(
-//              step,
-//              current.fromStep,
-//              heuristic.getCostEstimate(step, endStep),
-//              gScore + 1));
-//
-//        }
       }
 
       closedSet.put(current.step, current);
@@ -148,6 +119,8 @@ public class Astar<S> {
 
     var endStepData = closedSet.get(endStep);
     var predecessor = endStepData.getPredecessor();
+
+    System.out.println("predecessor " + predecessor);
 
     while (predecessor != null) {
       path.add(predecessor);
