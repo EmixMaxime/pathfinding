@@ -4,8 +4,7 @@ import fr.mx.pathfinding.plan.Coords2D;
 import fr.mx.pathfinding.traverse.Explorable;
 import fr.mx.pathfinding.plan.Step2D;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
 
@@ -24,7 +23,9 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
     LEFT
   }
 
-  /** Bounds of matrix. */
+  /**
+   * Bounds of matrix.
+   */
   private int xSize;
 
   private int ySize;
@@ -101,11 +102,11 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
 
   @Override
   public Set<Step2D<Values>> getReachableStepsFrom(Step2D<Values> step) {
-    return getReachableStepsFrom(step, new HashSet<>());
+    return getReachableStepsFrom(step, new LinkedHashSet<>());
   }
 
   public Set<Step2D<Values>> getReachableStepsFrom(
-      Step2D<Values> step2D, Set<Step2D<Values>> reachable) {
+    Step2D<Values> step2D, Set<Step2D<Values>> reachable) {
 
     if (allowsDiagonals) {
       // @TODO
@@ -115,7 +116,7 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
       var targetStep = isWalkable(step2D, direction);
 
       if (targetStep != null) {
-        reachable.add((targetStep));
+        reachable.add(targetStep);
       }
     }
 
