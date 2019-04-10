@@ -101,12 +101,12 @@ public class MapMatrix implements Explorable<Step2D<MapMatrix.Values>> {
   }
 
   @Override
-  public Set<Step2D<Values>> getReachableStepsFrom(Step2D<Values> step) {
-    return getReachableStepsFrom(step, new LinkedHashSet<>());
+  public List<Step2D<Values>> getReachableStepsFrom(Step2D<Values> step) {
+    return getReachableStepsFrom(step, new LinkedList<>());
   }
 
-  public Set<Step2D<Values>> getReachableStepsFrom(
-    Step2D<Values> step2D, Set<Step2D<Values>> reachable) {
+  public List<Step2D<Values>> getReachableStepsFrom(
+    Step2D<Values> step2D, List<Step2D<Values>> reachable) {
 
     if (allowsDiagonals) {
       // @TODO

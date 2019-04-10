@@ -1,5 +1,6 @@
 package fr.mx.pathfinding.traverse;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Set;
 
 public interface Explorable<S> {
 
-  Set<S> getReachableStepsFrom(S step);
+  List<S> getReachableStepsFrom(S step);
 
   /**
    * Returns a set of all steps from the specified step.
@@ -22,5 +23,5 @@ public interface Explorable<S> {
    * @throws NullPointerException if step is <code>null</code>.
    */
 
-  Set<S> getReachableStepsFrom(S step, Set<S> reachable);
+  List<S> getReachableStepsFrom(S step, List<S> reachable);
 }
