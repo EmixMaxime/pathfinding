@@ -5,6 +5,7 @@ import fr.mx.maths.ToleranceDoubleComparator;
 import fr.mx.pathfinding.traverse.Explorable;
 import fr.mx.pathfinding.traverse.TracableStep;
 import fr.mx.pathfinding.traverse.astar.AStarHeuristic;
+import org.w3c.dom.Node;
 
 import java.util.*;
 
@@ -30,6 +31,7 @@ import java.util.*;
 public class Astar<S> {
 
   private AStarHeuristic heuristic;
+  private S endStep;
 
 //  @Override
 //  public double getCostEstimate(Object sourceStep, Object targetStep) {
@@ -55,19 +57,20 @@ public class Astar<S> {
   // Comparator for comparing doubles with tolerance
   private Comparator<Double> comparator;
 
-  //  protected Set<S> openList;
-  protected Set<S> closedList;
-  //  private AStarHeuristic<S> heuristic;
+
+  private HashMap<S, NodeData<S>> closedSet;
 
   public Astar(AStarHeuristic heuristic, Explorable<S> explorable, S startStep, S endStep) {
+
     this.heuristic = heuristic;
+    this.endStep = endStep;
     this.comparator = new ToleranceDoubleComparator();
 
     // The set of currently discovered nodes that are not evaluated yet.
     // Initially, only the start node is known.
     PriorityQueue<NodeData<S>> openQueue = new PriorityQueue<>(new NodeComparator());
 
-    Set<S> closedSet = new HashSet<>();
+    closedSet = new HashMap<>();
 
     //Add in the openSet the startStep
     openQueue.add(new NodeData<S>(startStep, null, heuristic.getCostEstimate(startStep, endStep), 0));
@@ -90,18 +93,15 @@ public class Astar<S> {
         return;
       }
 
-      for (S step : explorable.getReachableStepsFrom(startStep)) {
-        if (closedSet.contains(step)) {
-          System.out.println("Already seen this node." + step);
-          //Ignore the neighboor which is already evaluated;
-          continue;
-        }
+      for (S step : explorable.getReachableStepsFrom(current.step)) {
 
+//        si v existe dans closedList avec un cout inférieur ou si v existe dans openList avec un cout inférieur
         // The distance from start to a neighbor
         double gScore = current.getgScore() + heuristic.getCostEstimate(current.step, step);
 
-        // discover a new step
-        if (!openQueue.stream().anyMatch(o -> o.step.equals(step))) {
+        if (closedSet.containsKey(step)) {
+          System.out.println("Already seen this node." + step);
+        } else if (!openQueue.stream().anyMatch(o -> o.step.equals(step))) {
           System.out.println("Discovered a new node." + step);
           openQueue.add(
             new NodeData<S>(
@@ -109,14 +109,52 @@ public class Astar<S> {
               current.fromStep,
               heuristic.getCostEstimate(step, endStep),
               gScore + 1));
-
         }
+
+//        if ((closedSet.containsKey(step) && closedSet.get(step).gScore < gScore) || (openQueue.stream().anyMatch(o -> o.gScore < gScore))) {
+//          System.out.println("Already seen this node." + step);
+//          //Ignore the neighboor which is already evaluated;
+//        } else {
+//          System.out.println("Discovered a new node." + step);
+//          openQueue.add(
+//            new NodeData<S>(
+//              step,
+//              current.fromStep,
+//              heuristic.getCostEstimate(step, endStep),
+//              gScore + 1));
+//        }
+
+        // discover a new step
+//        if (!openQueue.stream().anyMatch(o -> o.step.equals(step))) {
+//          System.out.println("Discovered a new node." + step);
+//          openQueue.add(
+//            new NodeData<S>(
+//              step,
+//              current.fromStep,
+//              heuristic.getCostEstimate(step, endStep),
+//              gScore + 1));
+//
+//        }
       }
 
-      closedSet.add(current.step);
+      closedSet.put(current.step, current);
     }
 
     System.out.println("Chemin introuvable");
+  }
+
+  public List<S> path() {
+    ArrayList<S> path = new ArrayList<>();
+
+    var endStepData = closedSet.get(endStep);
+    var predecessor = endStepData.getPredecessor();
+
+    while (predecessor != null) {
+      path.add(predecessor);
+      predecessor = closedSet.get(predecessor).getPredecessor();
+    }
+
+    return path;
   }
 
   /**

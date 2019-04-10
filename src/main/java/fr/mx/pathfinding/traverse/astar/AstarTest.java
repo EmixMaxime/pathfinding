@@ -23,7 +23,12 @@ class AstarTest {
 
 
     AStarHeuristic heuristic = new AStarEuclidianHeuristic();
-    Astar astar = new Astar<Step2D<MapMatrix.Values>>(heuristic, map, map.getElement(start), map.getElement(end));
+    Astar astar = new Astar<>(heuristic, map, map.getElement(start), map.getElement(end));
+
+    AStarHeuristic heuristic2 = new AStarManhattanHeuristic();
+    Astar astar2 = new Astar<>(heuristic2, map, map.getElement(start), map.getElement(end));
+
+//    astar.path();
 
   }
 
