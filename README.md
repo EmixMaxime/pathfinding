@@ -8,6 +8,14 @@ Okay, we can find a lot of algorithms / library that does almost the same thing,
 
 I found a lot of articles / code talking about these algorithms. But, something annoys me a lot, that's the code quality and reusability, I couldn't find any good code on the Internet so I made mine.
 
+## Algorithms
+### Informed search algorithm
+- [A*](https://en.wikipedia.org/wiki/A*_search_algorithm): like Dijkstra but achieves better performance by using heuristics to guide its search (that's why it's informed).
+
+### Undirected graphs
+- [BFS](https://en.wikipedia.org/wiki/Breadth-first_search): explore nearest successors first, then widen the search.
+- [DFS](https://en.wikipedia.org/wiki/Depth-first_search): explore a graph by going as far as possible, then backtrack.
+
 
 ## Status
 I'm working on documentation. I want this project to be very accessible. All of my choices, my errors, difficulties will be written so my work can be used to study.
