@@ -1,8 +1,11 @@
 package fr.mx.pathfinding;
 
+import com.sun.jdi.Value;
 import fr.mx.pathfinding.map.MapBuilder;
+import fr.mx.pathfinding.map.MapMatrix;
 import fr.mx.pathfinding.map.MapSearch;
 import fr.mx.pathfinding.plan.Coords2D;
+import fr.mx.pathfinding.plan.Step2D;
 import fr.mx.pathfinding.traverse.BreadthFirstIterator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,12 +47,12 @@ public class GUIController {
           Image road = null;
           try {
             road =
-                new Image(
-                    new FileInputStream("resources/imgs/sand_tile.png"),
-                    xTileSize,
-                    yTitleSize,
-                    true,
-                    false);
+              new Image(
+                new FileInputStream("resources/imgs/sand_tile.png"),
+                xTileSize,
+                yTitleSize,
+                true,
+                false);
           } catch (FileNotFoundException e) {
             e.printStackTrace();
           }
@@ -57,61 +60,69 @@ public class GUIController {
           Image obstacle = null;
           try {
             obstacle =
-                new Image(
-                    new FileInputStream("resources/imgs/grass_tile_1.png"),
-                    xTileSize,
-                    yTitleSize,
-                    true,
-                    false);
+              new Image(
+                new FileInputStream("resources/imgs/grass_tile_1.png"),
+                xTileSize,
+                yTitleSize,
+                true,
+                false);
           } catch (FileNotFoundException e) {
             e.printStackTrace();
           }
+
 
           Image perso = null;
           try {
             perso =
-                new Image(
-                    new FileInputStream("resources/imgs/perso.png"),
-                    xTileSize,
-                    yTitleSize,
-                    true,
-                    false);
+              new Image(
+                new FileInputStream("resources/imgs/perso.png"),
+                xTileSize,
+                yTitleSize,
+                true,
+                false);
           } catch (FileNotFoundException e) {
             e.printStackTrace();
           }
+
+          Image path = perso;
+
 
           ImageView win = null;
           try {
             win =
-                new ImageView(
-                    new Image(
-                        new FileInputStream("resources/imgs/gem.png"),
-                        xTileSize,
-                        yTitleSize,
-                        true,
-                        false));
+              new ImageView(
+                new Image(
+                  new FileInputStream("resources/imgs/gem.png"),
+                  xTileSize,
+                  yTitleSize,
+                  true,
+                  false));
           } catch (FileNotFoundException e) {
             e.printStackTrace();
-          }
-
-          // Add things into the grid. Obstacle or road!
-          for (int y = 0; y < mapMatrix.getYSize(); y++) {
-            for (int x = 0; x < mapMatrix.getXSize(); x++) {
-              if (mapMatrix.isWalkable(x, y) != null) {
-                ImageView img = new ImageView(road);
-                maze.getChildren().add(img);
-              } else {
-                ImageView img = new ImageView(obstacle);
-                maze.getChildren().add(img);
-              }
-            }
           }
 
           var start = mapSearch.getStart();
           var end = mapSearch.getGoal();
 
-          maze.getChildren().set(computeIndexFromXY(start), new ImageView(perso));
-          maze.getChildren().set(computeIndexFromXY(end), win);
+          // Add things into the grid. Obstacle or road!
+          for (int y = 0; y < mapMatrix.getYSize(); y++) {
+            for (int x = 0; x < mapMatrix.getXSize(); x++) {
+              ImageView img = null;
+
+              if (start.equals(new Coords2D(x, y))) {
+                img = new ImageView(perso);
+              } else if (end.equals(new Coords2D(x, y))) {
+                img = win;
+              } else if (mapMatrix.isWalkable(x, y) != null) {
+                img = new ImageView(road);
+              } else {
+                img = new ImageView(obstacle);
+              }
+
+              maze.getChildren().add(img);
+            }
+          }
+
 
           var map = mapSearch.getMap();
           var s = map.getElement(start);
@@ -122,17 +133,40 @@ public class GUIController {
             System.out.println(it.next());
           }
 
-          var list = it.path();
-          for (var item : list) {
-            System.out.println("x,y of path " + item.getX() + " " + item.getY());
-            maze.getChildren().set(computeIndexFromXY(item.getCoords()), new ImageView(perso));
+          List<Step2D<MapMatrix.Values>> list = it.path();
+          maze.getChildren().clear();
+
+          // Redraw everything!
+          for (int y = 0; y < mapMatrix.getYSize(); y++) {
+            for (int x = 0; x < mapMatrix.getXSize(); x++) {
+              ImageView img = null;
+
+              if (list.contains(mapMatrix.getElement(new Coords2D(x, y)))) {
+                img = new ImageView(path);
+              } else if (start.equals(new Coords2D(x, y))) {
+                img = new ImageView(perso);
+              } else if (end.equals(new Coords2D(x, y))) {
+                img = win;
+              } else if (mapMatrix.isWalkable(x, y) != null) {
+                img = new ImageView(road);
+              } else {
+                img = new ImageView(obstacle);
+              }
+
+              maze.getChildren().add(img);
+            }
           }
+
+//          for (var item : list) {
+//            System.out.println("x,y of path " + item.getX() + " " + item.getY());
+//            maze.getChildren().set(computeIndexFromXY(item.getCoords()), new ImageView(perso));
+//          }
         }
 
         @Override
         protected MapSearch call() {
           System.out.println("call in thread for map " + mapName);
-          MapSearch mapSearch = mapSearchSupplier.get("/"+mapName);
+          MapSearch mapSearch = mapSearchSupplier.get("/" + mapName);
 
           var start = mapSearch.getStart();
           var end = mapSearch.getGoal();

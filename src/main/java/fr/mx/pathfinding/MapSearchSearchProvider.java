@@ -4,6 +4,8 @@ import fr.mx.pathfinding.map.MapBuilder;
 import fr.mx.pathfinding.map.MapSearch;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,8 @@ public class MapSearchSearchProvider implements MapSearchSupplier {
   @Override
   public List<String> getAvailableMaps() {
     // @TODO FIX THIS ABSOLUTE PATH !!
-    File[] files = new File("/home/mx/Bureau/3il-graphs/src/main/resources/fr/mx/pathfinding").listFiles((dir, name) -> name.endsWith(".txt"));
+    Path path = Paths.get(System.getProperty("user.dir") , "src/main/resources/fr/mx/pathfinding");
+    File[] files = new File(path.toString()).listFiles((dir, name) -> name.endsWith(".txt"));
 
     if (files == null) {
       throw new Error("No map files found");
